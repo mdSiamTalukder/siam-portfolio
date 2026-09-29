@@ -12,12 +12,34 @@ const PORT = process.env.PORT || 5000;
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* =====================================
+   Allowed Origins
+===================================== */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4173",
+  "https://siam-portfolio-cdnm.vercel.app",
+];
+
+/* =====================================
    Middleware
 ===================================== */
 
 app.use(
   cors({
-    origin: /^http:\/\/localhost:\d+$/,
+    origin: (origin, callback) => {
+      // Allow requests without an origin
+      // Example: Postman, Thunder Client, server-to-server
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
@@ -67,9 +89,11 @@ app.post("/api/contact", async (req, res) => {
 You received a new message from your portfolio website.
 
 Name: ${name.trim()}
+
 Email: ${email.trim()}
 
 Message:
+
 ${message.trim()}
       `,
     });
