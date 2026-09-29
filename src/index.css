@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #050505;
+  color: #ffffff;
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: #ffffff;
+  color: #000000;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+}
+
+/* =====================================
+   LIGHT MODE
+===================================== */
+
+html.light-mode {
+  background: #f7f8fa;
+}
+
+html.light-mode body {
+  background: #f7f8fa;
+  color: #111111;
+}
+
+/* =====================================
+   Main Dark Backgrounds
+===================================== */
+
+html.light-mode .bg-\[\#050505\] {
+  background-color: #f7f8fa;
+}
+
+html.light-mode .bg-\[\#0b0b0b\] {
+  background-color: #ffffff;
+}
+
+/* =====================================
+   White Text
+===================================== */
+
+html.light-mode .text-white {
+  color: #111111;
+}
+
+html.light-mode .text-white\/90 {
+  color: rgb(17 17 17 / 0.9);
+}
+
+html.light-mode .text-white\/80 {
+  color: rgb(17 17 17 / 0.8);
+}
+
+html.light-mode .text-white\/70 {
+  color: rgb(17 17 17 / 0.7);
+}
+
+html.light-mode .text-white\/60 {
+  color: rgb(17 17 17 / 0.6);
+}
+
+html.light-mode .text-white\/50 {
+  color: rgb(17 17 17 / 0.5);
+}
+
+html.light-mode .text-white\/45 {
+  color: rgb(17 17 17 / 0.45);
+}
+
+html.light-mode .text-white\/40 {
+  color: rgb(17 17 17 / 0.4);
+}
+
+html.light-mode .text-white\/30 {
+  color: rgb(17 17 17 / 0.3);
+}
+
+html.light-mode .text-white\/25 {
+  color: rgb(17 17 17 / 0.25);
+}
+
+html.light-mode .text-white\/20 {
+  color: rgb(17 17 17 / 0.2);
+}
+
+html.light-mode .text-white\/15 {
+  color: rgb(17 17 17 / 0.15);
+}
+
+/* =====================================
+   Black Text
+===================================== */
+
+html.light-mode .text-black {
+  color: #ffffff;
+}
+
+/* =====================================
+   White Background
+===================================== */
+
+html.light-mode .bg-white {
+  background-color: #111111;
+}
+
+html.light-mode .bg-white\/90 {
+  background-color: rgb(17 17 17 / 0.9);
+}
+
+/* =====================================
+   White Borders
+===================================== */
+
+html.light-mode .border-white\/5 {
+  border-color: rgb(0 0 0 / 0.05);
+}
+
+html.light-mode .border-white\/8 {
+  border-color: rgb(0 0 0 / 0.08);
+}
+
+html.light-mode .border-white\/10 {
+  border-color: rgb(0 0 0 / 0.10);
+}
+
+html.light-mode .border-white\/15 {
+  border-color: rgb(0 0 0 / 0.15);
+}
+
+html.light-mode .border-white\/20 {
+  border-color: rgb(0 0 0 / 0.20);
+}
+
+/* =====================================
+   White Background Opacity
+===================================== */
+
+html.light-mode .bg-white\/\[0\.02\] {
+  background-color: rgb(0 0 0 / 0.02);
+}
+
+html.light-mode .bg-white\/\[0\.025\] {
+  background-color: rgb(0 0 0 / 0.025);
+}
+
+html.light-mode .bg-white\/\[0\.035\] {
+  background-color: rgb(0 0 0 / 0.035);
+}
+
+html.light-mode .bg-white\/\[0\.045\] {
+  background-color: rgb(0 0 0 / 0.045);
+}
+
+html.light-mode .bg-white\/\[0\.06\] {
+  background-color: rgb(0 0 0 / 0.06);
+}
+
+html.light-mode .bg-white\/\[0\.07\] {
+  background-color: rgb(0 0 0 / 0.07);
+}
+
+/* =====================================
+   Smooth Theme Transition
+===================================== */
+
+body,
+header,
+nav,
+section,
+footer,
+button,
+input,
+textarea,
+a {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+/* =====================================
+   Form Elements
+===================================== */
+
+html.light-mode input,
+html.light-mode textarea {
+  color: #111111;
+  background-color: #ffffff;
+}
+
+html.light-mode input::placeholder,
+html.light-mode textarea::placeholder {
+  color: rgb(17 17 17 / 0.35);
+}
+
+/* =====================================
+   Selection
+===================================== */
+
+html.light-mode ::selection {
+  background: #111111;
+  color: #ffffff;
+}
