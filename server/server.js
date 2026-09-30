@@ -17,6 +17,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5176",
+  "http://localhost:5177",
   "http://localhost:4173",
   "https://siam-portfolio-cdnm.vercel.app",
 ];
