@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://siam-portfolio-cdnm.vercel.app/sitemap.xml
