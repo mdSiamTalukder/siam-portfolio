@@ -140,8 +140,6 @@ const Hero = () => {
             >
               {isBangla ? (
                 <>
-                  {/* তৈরি করছি */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -161,8 +159,6 @@ const Hero = () => {
                   >
                     তৈরি করছি
                   </motion.span>
-
-                  {/* ডিজিটাল */}
 
                   <motion.span
                     variants={{
@@ -184,8 +180,6 @@ const Hero = () => {
                     ডিজিটাল
                   </motion.span>
 
-                  {/* অভিজ্ঞতা */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -206,8 +200,6 @@ const Hero = () => {
                     অভিজ্ঞতা
                   </motion.span>
 
-                  {/* যা */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -227,8 +219,6 @@ const Hero = () => {
                   >
                     যা
                   </motion.span>
-
-                  {/* সত্যিই কাজ করে */}
 
                   <motion.span
                     variants={{
@@ -252,8 +242,6 @@ const Hero = () => {
                 </>
               ) : (
                 <>
-                  {/* Building */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -273,8 +261,6 @@ const Hero = () => {
                   >
                     Building
                   </motion.span>
-
-                  {/* digital */}
 
                   <motion.span
                     variants={{
@@ -296,8 +282,6 @@ const Hero = () => {
                     digital
                   </motion.span>
 
-                  {/* experiences */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -318,8 +302,6 @@ const Hero = () => {
                     experiences
                   </motion.span>
 
-                  {/* that */}
-
                   <motion.span
                     variants={{
                       hidden: {
@@ -339,8 +321,6 @@ const Hero = () => {
                   >
                     that
                   </motion.span>
-
-                  {/* actually work */}
 
                   <motion.span
                     variants={{
@@ -383,9 +363,7 @@ const Hero = () => {
             >
               {isBangla ? (
                 <>
-                  <motion.span variants={textReveal}>
-                    আমি{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}>আমি </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -394,9 +372,7 @@ const Hero = () => {
                     সিয়াম তালুকদার
                   </motion.span>
 
-                  <motion.span variants={textReveal}>
-                    , একজন{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}>, একজন </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -405,10 +381,7 @@ const Hero = () => {
                     MERN Stack Developer
                   </motion.span>
 
-                  <motion.span variants={textReveal}>
-                    {" "}
-                    যিনি{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}> যিনি </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -429,10 +402,7 @@ const Hero = () => {
                     frontend
                   </motion.span>
 
-                  <motion.span variants={textReveal}>
-                    {" "}
-                    থেকে{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}> থেকে </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -448,9 +418,7 @@ const Hero = () => {
                 </>
               ) : (
                 <>
-                  <motion.span variants={textReveal}>
-                    I’m{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}>I’m </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -459,9 +427,7 @@ const Hero = () => {
                     Siam Talukder
                   </motion.span>
 
-                  <motion.span variants={textReveal}>
-                    , a{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}>, a </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -494,10 +460,7 @@ const Hero = () => {
                     frontend
                   </motion.span>
 
-                  <motion.span variants={textReveal}>
-                    {" "}
-                    to{" "}
-                  </motion.span>
+                  <motion.span variants={textReveal}> to </motion.span>
 
                   <motion.span
                     variants={textReveal}
@@ -505,9 +468,8 @@ const Hero = () => {
                   >
                     backend
                   </motion.span>
-                  <motion.span variants={textReveal}>
-                    .
-                  </motion.span>
+
+                  <motion.span variants={textReveal}>.</motion.span>
                 </>
               )}
             </motion.p>
@@ -526,8 +488,6 @@ const Hero = () => {
               }}
               className="mt-9 flex flex-col gap-3 sm:flex-row"
             >
-              {/* View Work */}
-
               <motion.a
                 href="#projects"
                 whileHover={{
@@ -547,8 +507,6 @@ const Hero = () => {
                   className="transition-transform duration-300 group-hover:translate-x-1"
                 />
               </motion.a>
-
-              {/* Contact */}
 
               <motion.a
                 href="#contact"
@@ -639,7 +597,7 @@ const Hero = () => {
               delay: 0.45,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="relative hidden min-h-[500px] items-center justify-center lg:flex"
+            className="relative flex min-h-[380px] items-center justify-center sm:min-h-[450px] lg:min-h-[500px]"
           >
             {/* Outer ring */}
 
@@ -652,7 +610,7 @@ const Hero = () => {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute h-[370px] w-[370px] rounded-full border border-white/[0.06]"
+              className="absolute h-[280px] w-[280px] rounded-full border border-white/[0.06] sm:h-[340px] sm:w-[340px] lg:h-[370px] lg:w-[370px]"
             />
 
             <motion.div
@@ -664,7 +622,7 @@ const Hero = () => {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute h-[280px] w-[280px] rounded-full border border-cyan-300/[0.08]"
+              className="absolute h-[215px] w-[215px] rounded-full border border-cyan-300/[0.08] sm:h-[260px] sm:w-[260px] lg:h-[280px] lg:w-[280px]"
             />
 
             {/* Main card */}
@@ -677,7 +635,7 @@ const Hero = () => {
                 duration: 0.4,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative h-[330px] w-[330px] border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md"
+              className="relative h-[270px] w-[270px] border border-white/10 bg-white/[0.025] p-4 backdrop-blur-md sm:h-[310px] sm:w-[310px] sm:p-5 lg:h-[330px] lg:w-[330px]"
             >
               {/* Inner border */}
 
@@ -713,25 +671,25 @@ const Hero = () => {
                   <img
                     src="/siam.jpeg"
                     alt="Siam Talukder"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-center"
                   />
                 </motion.div>
 
                 {/* Corner labels */}
 
-                <span className="absolute left-4 top-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                <span className="absolute left-3 top-3 z-20 font-mono text-[8px] uppercase tracking-[0.18em] text-white/35 sm:left-4 sm:top-4 sm:text-[9px] sm:tracking-[0.2em]">
                   MERN
                 </span>
 
-                <span className="absolute right-4 top-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-300/55">
+                <span className="absolute right-3 top-3 z-20 font-mono text-[8px] uppercase tracking-[0.18em] text-cyan-300/55 sm:right-4 sm:top-4 sm:text-[9px] sm:tracking-[0.2em]">
                   DEV
                 </span>
 
-                <span className="absolute bottom-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                <span className="absolute bottom-3 left-3 z-20 font-mono text-[8px] uppercase tracking-[0.18em] text-white/35 sm:bottom-4 sm:left-4 sm:text-[9px] sm:tracking-[0.2em]">
                   2026
                 </span>
 
-                <span className="absolute bottom-4 right-4 z-20 font-mono text-[9px] uppercase tracking-[0.16em] text-violet-300/55">
+                <span className="absolute bottom-3 right-3 z-20 font-mono text-[8px] uppercase tracking-[0.16em] text-violet-300/55 sm:bottom-4 sm:right-4 sm:text-[9px]">
                   SIAM
                 </span>
 
@@ -755,9 +713,9 @@ const Hero = () => {
               whileHover={{
                 scale: 1.03,
               }}
-              className="absolute -bottom-2 left-4 border border-white/10 bg-[#080808]/90 px-4 py-3 backdrop-blur-xl"
+              className="absolute -bottom-1 left-0 border border-white/10 bg-[#080808]/90 px-3 py-2.5 backdrop-blur-xl sm:left-2 sm:px-4 sm:py-3 lg:-bottom-2 lg:left-4"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 <motion.span
                   animate={{
                     scale: [1, 1.25, 1],
@@ -771,7 +729,7 @@ const Hero = () => {
                   className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
                 />
 
-                <span className="text-[10px] uppercase tracking-[0.16em] text-white/45">
+                <span className="text-[9px] uppercase tracking-[0.13em] text-white/45 sm:text-[10px] sm:tracking-[0.16em]">
                   Building the web
                 </span>
               </div>
@@ -791,9 +749,9 @@ const Hero = () => {
               whileHover={{
                 scale: 1.03,
               }}
-              className="absolute -right-2 top-12 border border-white/10 bg-[#080808]/90 px-4 py-3 backdrop-blur-xl"
+              className="absolute -right-1 top-4 border border-white/10 bg-[#080808]/90 px-3 py-2.5 backdrop-blur-xl sm:right-0 sm:top-8 sm:px-4 sm:py-3 lg:-right-2 lg:top-12"
             >
-              <span className="text-[10px] uppercase tracking-[0.16em] text-violet-300/60">
+              <span className="text-[9px] uppercase tracking-[0.12em] text-violet-300/60 sm:text-[10px] sm:tracking-[0.16em]">
                 React · Node · MongoDB
               </span>
             </motion.div>
