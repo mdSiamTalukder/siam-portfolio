@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -82,6 +81,52 @@ const projects = [
   },
 ];
 
+/* =================================
+   Project Showcase Animation
+================================== */
+const projectReveal = {
+  hidden: {
+    opacity: 0,
+    y: 55,
+    scale: 0.88,
+    rotateX: 10,
+    filter: "blur(10px)",
+  },
+
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotateX: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.9,
+      delay: index * 0.18,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
+
+/* =================================
+   Project Content Animation
+================================== */
+const contentReveal = {
+  hidden: {
+    opacity: 0,
+    y: 12,
+  },
+
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      delay: index * 0.18 + 0.3,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
 const Projects = () => {
   const { language } = useLanguage();
   const t = translations[language];
@@ -101,45 +146,134 @@ const Projects = () => {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* =================================
+            Section Header
+        ================================== */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{
+            opacity: 0,
+            y: 30,
+            scale: 0.97,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }}
+          viewport={{
+            once: false,
+            amount: 0.3,
+          }}
           transition={{
-            duration: 0.7,
+            duration: 0.75,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="mx-auto max-w-3xl text-center"
         >
           {/* Label */}
-          <div className="mb-5 inline-flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" />
+          <motion.div
+            initial={{
+              opacity: 0,
+              scale: 0.85,
+            }}
+            whileInView={{
+              opacity: 1,
+              scale: 1,
+            }}
+            viewport={{
+              once: false,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 0.55,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="mb-5 inline-flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 backdrop-blur-sm"
+          >
+            <motion.span
+              initial={{
+                scale: 0,
+                opacity: 0,
+              }}
+              whileInView={{
+                scale: 1,
+                opacity: 1,
+              }}
+              viewport={{
+                once: false,
+                amount: 0.3,
+              }}
+              transition={{
+                duration: 0.4,
+                delay: 0.15,
+              }}
+              className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500"
+            />
 
             <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-medium uppercase tracking-[0.2em] text-transparent">
               {t.projects.badge}
             </span>
-          </div>
+          </motion.div>
 
           {/* Heading */}
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <motion.h2
+            initial={{
+              opacity: 0,
+              y: 18,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: false,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 0.65,
+              delay: 0.08,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+          >
             <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               {t.projects.titleStart}
             </span>{" "}
             <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               {t.projects.titleEnd}
             </span>
-          </h2>
+          </motion.h2>
 
           {/* Description */}
-          <p className="mt-5 text-sm leading-7 sm:text-base sm:leading-8">
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: false,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="mt-5 text-sm leading-7 sm:text-base sm:leading-8"
+          >
             <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
               {t.projects.description}
             </span>
-          </p>
+          </motion.p>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* =================================
+            Projects Grid
+        ================================== */}
         <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-7">
           {projects.map((project, index) => {
             const projectTranslation = t.projects[project.key];
@@ -147,30 +281,84 @@ const Projects = () => {
             return (
               <motion.article
                 key={project.key}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{
-                  duration: 0.65,
-                  delay: index * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
+                custom={index}
+                variants={projectReveal}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: false,
+                  amount: 0.15,
                 }}
-                whileHover={{ y: -6 }}
+                whileHover={{
+                  y: -7,
+                  scale: 1.008,
+                  transition: {
+                    duration: 0.3,
+                    ease: "easeOut",
+                  },
+                }}
+                style={{
+                  transformPerspective: 1000,
+                }}
                 className="group relative overflow-hidden border border-white/10 bg-white/[0.025] backdrop-blur-sm"
               >
-                {/* Hover Glow */}
-                <div
-                  className={`pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full ${project.glow} opacity-0 blur-[90px] transition-opacity duration-500 group-hover:opacity-100`}
+                {/* =================================
+                    Hover Glow
+                ================================== */}
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.7,
+                  }}
+                  whileHover={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                  }}
+                  className={`pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full ${project.glow} blur-[90px]`}
                 />
 
-                {/* Top Gradient Line */}
-                <div
+                {/* =================================
+                    Top Gradient Line
+                ================================== */}
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                    transformOrigin: "left",
+                  }}
+                  whileInView={{
+                    scaleX: 1,
+                  }}
+                  viewport={{
+                    once: false,
+                    amount: 0.15,
+                  }}
+                  transition={{
+                    duration: 0.9,
+                    delay: index * 0.18 + 0.15,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className={`h-px w-full bg-gradient-to-r ${project.gradient} opacity-60 transition-opacity duration-300 group-hover:opacity-100`}
                 />
 
                 <div className="relative p-6 sm:p-7 lg:p-8">
-                  {/* Project Header */}
-                  <div className="flex items-start justify-between gap-4">
+                  {/* =================================
+                      Project Header
+                  ================================== */}
+                  <motion.div
+                    custom={index}
+                    variants={contentReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                      once: false,
+                      amount: 0.15,
+                    }}
+                    className="flex items-start justify-between gap-4"
+                  >
                     <div>
                       <span
                         className={`bg-gradient-to-r ${project.gradient} bg-clip-text text-xs font-semibold tracking-[0.2em] text-transparent`}
@@ -189,13 +377,30 @@ const Projects = () => {
                       </p>
                     </div>
 
+                    {/* Project Icon */}
                     <motion.div
+                      initial={{
+                        opacity: 0,
+                        scale: 0.6,
+                        rotate: -15,
+                      }}
+                      whileInView={{
+                        opacity: 1,
+                        scale: 1,
+                        rotate: 0,
+                      }}
+                      viewport={{
+                        once: false,
+                        amount: 0.15,
+                      }}
+                      transition={{
+                        duration: 0.55,
+                        delay: index * 0.18 + 0.35,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                       whileHover={{
                         rotate: 8,
                         scale: 1.08,
-                      }}
-                      transition={{
-                        duration: 0.2,
                       }}
                       className={`flex h-11 w-11 shrink-0 items-center justify-center border border-white/10 bg-gradient-to-br ${project.glow}`}
                     >
@@ -205,31 +410,120 @@ const Projects = () => {
                         className="text-white/60 transition-colors duration-300 group-hover:text-white"
                       />
                     </motion.div>
-                  </div>
+                  </motion.div>
 
-                  {/* Description */}
-                  <p className="mt-6 text-sm leading-7 text-white/55 sm:text-[15px]">
+                  {/* =================================
+                      Description
+                  ================================== */}
+                  <motion.p
+                    custom={index}
+                    variants={contentReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                      once: false,
+                      amount: 0.15,
+                    }}
+                    className="mt-6 text-sm leading-7 text-white/55 sm:text-[15px]"
+                  >
                     {projectTranslation.description}
-                  </p>
+                  </motion.p>
 
-                  {/* Features */}
-                  <div className="mt-6 grid grid-cols-2 gap-2">
-                    {projectTranslation.features.map((feature) => (
-                      <div
+                  {/* =================================
+                      Features
+                  ================================== */}
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 15,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    viewport={{
+                      once: false,
+                      amount: 0.15,
+                    }}
+                    transition={{
+                      duration: 0.55,
+                      delay: index * 0.18 + 0.4,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="mt-6 grid grid-cols-2 gap-2"
+                  >
+                    {projectTranslation.features.map((feature, featureIndex) => (
+                      <motion.div
                         key={feature}
+                        initial={{
+                          opacity: 0,
+                          scale: 0.94,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        viewport={{
+                          once: false,
+                          amount: 0.15,
+                        }}
+                        transition={{
+                          duration: 0.35,
+                          delay:
+                            index * 0.18 +
+                            0.42 +
+                            featureIndex * 0.05,
+                        }}
                         className="border border-white/5 bg-white/[0.025] px-3 py-2.5"
                       >
                         <span className="text-xs text-white/55">
                           {feature}
                         </span>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
 
-                  {/* Technology Stack */}
-                  <div className="mt-7">
+                  {/* =================================
+                      Technology Stack
+                  ================================== */}
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 15,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    viewport={{
+                      once: false,
+                      amount: 0.15,
+                    }}
+                    transition={{
+                      duration: 0.55,
+                      delay: index * 0.18 + 0.48,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="mt-7"
+                  >
                     <div className="mb-3 flex items-center gap-2">
-                      <div className="h-px w-5 bg-white/15" />
+                      <motion.div
+                        initial={{
+                          width: 0,
+                        }}
+                        whileInView={{
+                          width: 20,
+                        }}
+                        viewport={{
+                          once: false,
+                          amount: 0.15,
+                        }}
+                        transition={{
+                          duration: 0.45,
+                          delay: index * 0.18 + 0.5,
+                        }}
+                        className="h-px bg-white/15"
+                      />
 
                       <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/35">
                         {t.projects.techStack}
@@ -237,19 +531,61 @@ const Projects = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((technology) => (
-                        <span
-                          key={technology}
-                          className="border border-white/8 bg-white/[0.03] px-2.5 py-1.5 text-[11px] text-white/50 transition-colors duration-300 group-hover:border-white/12 group-hover:text-white/70"
-                        >
-                          {technology}
-                        </span>
-                      ))}
+                      {project.technologies.map(
+                        (technology, technologyIndex) => (
+                          <motion.span
+                            key={technology}
+                            initial={{
+                              opacity: 0,
+                              y: 8,
+                            }}
+                            whileInView={{
+                              opacity: 1,
+                              y: 0,
+                            }}
+                            viewport={{
+                              once: false,
+                              amount: 0.15,
+                            }}
+                            transition={{
+                              duration: 0.3,
+                              delay:
+                                index * 0.18 +
+                                0.52 +
+                                technologyIndex * 0.045,
+                            }}
+                            className="border border-white/8 bg-white/[0.03] px-2.5 py-1.5 text-[11px] text-white/50 transition-colors duration-300 group-hover:border-white/12 group-hover:text-white/70"
+                          >
+                            {technology}
+                          </motion.span>
+                        ),
+                      )}
                     </div>
-                  </div>
+                  </motion.div>
 
-                  {/* Buttons */}
-                  <div className="mt-8 flex flex-wrap items-center gap-3">
+                  {/* =================================
+                      Buttons
+                  ================================== */}
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 18,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    viewport={{
+                      once: false,
+                      amount: 0.15,
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.18 + 0.6,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="mt-8 flex flex-wrap items-center gap-3"
+                  >
                     {/* GitHub */}
                     {project.github ? (
                       <a
@@ -307,21 +643,32 @@ const Projects = () => {
                         <span>{t.projects.liveDemo}</span>
                       </span>
                     )}
-                  </div>
+                  </motion.div>
                 </div>
               </motion.article>
             );
           })}
         </div>
 
-        {/* Bottom Statement */}
+        {/* =================================
+            Bottom Statement
+        ================================== */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: false,
+            amount: 0.3,
+          }}
           transition={{
             duration: 0.6,
-            delay: 0.15,
+            delay: 0.2,
           }}
           className="mx-auto mt-14 max-w-2xl text-center"
         >
@@ -342,9 +689,18 @@ const Projects = () => {
       ================================== */}
       <motion.a
         href="#contact"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: false,
+          amount: 0.2,
+        }}
         transition={{
           duration: 0.6,
           delay: 0.35,

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -33,6 +32,106 @@ const socialLinks = [
     icon: Mail,
   },
 ];
+
+/* =========================================
+   Contact Animations
+========================================= */
+
+const headingContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const headingItem = {
+  hidden: {
+    opacity: 0,
+    y: 22,
+    filter: "blur(7px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const leftContentReveal = {
+  hidden: {
+    opacity: 0,
+    y: 45,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.9,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const socialReveal = {
+  hidden: {
+    opacity: 0,
+    x: -28,
+    scale: 0.97,
+  },
+  visible: (index) => ({
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      delay: index * 0.12,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+const formReveal = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+    y: 35,
+    filter: "blur(12px)",
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.95,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const formItemReveal = {
+  hidden: {
+    opacity: 0,
+    y: 15,
+  },
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      delay: 0.25 + index * 0.1,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
 
 const Contact = () => {
   const { language } = useLanguage();
@@ -130,68 +229,128 @@ const Contact = () => {
       {/* =================================
           Background Glows
       ================================== */}
-      <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-cyan-500/[0.045] blur-[120px]" />
 
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-violet-500/[0.05] blur-[120px]" />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{
+          duration: 1.4,
+          ease: "easeOut",
+        }}
+        className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-cyan-500/[0.045] blur-[120px]"
+      />
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.02] blur-[120px]" />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{
+          duration: 1.5,
+          delay: 0.15,
+          ease: "easeOut",
+        }}
+        className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-violet-500/[0.05] blur-[120px]"
+      />
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{
+          duration: 1.5,
+          delay: 0.25,
+        }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.018] blur-[120px]"
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
         {/* =================================
             Section Heading
         ================================== */}
+
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{
-            duration: 0.7,
-            ease: [0.22, 1, 0.36, 1],
-          }}
+          variants={headingContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.3 }}
           className="max-w-3xl"
         >
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-8 bg-gradient-to-r from-cyan-400 to-violet-400" />
+          <motion.div
+            variants={headingItem}
+            className="mb-5 flex items-center gap-3"
+          >
+            <motion.span
+              initial={{ width: 0 }}
+              whileInView={{ width: 32 }}
+              viewport={{ once: false }}
+              transition={{
+                duration: 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="h-px bg-gradient-to-r from-cyan-400 to-violet-400"
+            />
 
             <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent">
               {t.contact.badge}
             </span>
-          </div>
+          </motion.div>
 
-          <h2 className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl">
+          <motion.h2
+            variants={headingItem}
+            className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl"
+          >
             {t.contact.titleStart}{" "}
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
               {t.contact.titleEnd}
             </span>
-          </h2>
+          </motion.h2>
 
-          <div className="mt-5 h-px w-24 bg-gradient-to-r from-cyan-400 via-blue-400 to-transparent" />
+          <motion.div
+            variants={headingItem}
+            className="mt-5 h-px w-24 bg-gradient-to-r from-cyan-400 via-blue-400 to-transparent"
+          />
 
-          <p className="mt-6 max-w-2xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8">
+          <motion.p
+            variants={headingItem}
+            className="mt-6 max-w-2xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8"
+          >
             {t.contact.description}
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* =================================
             Contact Content
         ================================== */}
+
         <div className="mt-14 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+
           {/* =================================
               Left Side
           ================================== */}
+
           <motion.div
-            initial={{ opacity: 0, x: -35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            variants={leftContentReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.2 }}
             className="flex flex-col justify-between"
           >
             <div>
+
               {/* Availability */}
-              <div className="inline-flex items-center gap-2 border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-2">
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, x: -15 }}
+                whileInView={{ opacity: 1, scale: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{
+                  duration: 0.55,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="inline-flex items-center gap-2 border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-2"
+              >
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -200,25 +359,63 @@ const Contact = () => {
                 <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-emerald-300/80">
                   {t.contact.availability}
                 </span>
-              </div>
+              </motion.div>
 
-              <h3 className="mt-7 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              <motion.h3
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{
+                  duration: 0.65,
+                  delay: 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="mt-7 text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+              >
                 {t.contact.talkTitleStart}{" "}
                 <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
                   {t.contact.talkTitleEnd}
                 </span>
-              </h3>
+              </motion.h3>
 
-              <p className="mt-5 max-w-md text-sm leading-7 text-white/40">
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.18,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="mt-5 max-w-md text-sm leading-7 text-white/40"
+              >
                 {t.contact.talkDescription}
-              </p>
+              </motion.p>
             </div>
 
             {/* Location */}
-            <div className="mt-10 flex items-center gap-3 border-t border-white/5 pt-6">
-              <div className="flex h-10 w-10 items-center justify-center border border-white/10 bg-white/[0.025] text-cyan-300">
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.25,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mt-10 flex items-center gap-3 border-t border-white/5 pt-6"
+            >
+              <motion.div
+                whileHover={{
+                  scale: 1.08,
+                  rotate: -4,
+                }}
+                transition={{ duration: 0.25 }}
+                className="flex h-10 w-10 items-center justify-center border border-white/10 bg-white/[0.025] text-cyan-300"
+              >
                 <MapPin size={17} strokeWidth={1.6} />
-              </div>
+              </motion.div>
 
               <div>
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
@@ -229,31 +426,61 @@ const Contact = () => {
                   {t.contact.location}
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Social Links */}
+
             <div className="mt-8 space-y-3">
-              {socialLinks.map((item) => {
+              {socialLinks.map((item, index) => {
                 const Icon = item.icon;
 
                 return (
                   <motion.a
                     key={item.key}
+                    custom={index}
+                    variants={socialReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                      once: false,
+                      amount: 0.25,
+                    }}
                     href={item.href}
                     target="_blank"
                     rel="noreferrer"
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                    className="group flex items-center justify-between border border-white/5 bg-white/[0.015] px-4 py-3 transition-all duration-300 hover:border-white/10 hover:bg-white/[0.03]"
+                    whileHover={{
+                      x: 7,
+                      transition: {
+                        duration: 0.25,
+                        ease: "easeOut",
+                      },
+                    }}
+                    className="group relative flex items-center justify-between overflow-hidden border border-white/5 bg-white/[0.015] px-4 py-3 transition-all duration-300 hover:border-cyan-400/15 hover:bg-white/[0.03]"
                   >
+                    {/* Hover Line */}
+
+                    <motion.span
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-cyan-400 to-violet-400"
+                    />
+
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/10 bg-white/[0.025] text-[10px] font-semibold uppercase tracking-tight text-white/45 transition-all duration-300 group-hover:border-cyan-400/20 group-hover:text-cyan-300">
+                      <motion.div
+                        whileHover={{
+                          scale: 1.08,
+                          rotate: 3,
+                        }}
+                        transition={{ duration: 0.2 }}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/10 bg-white/[0.025] text-[10px] font-semibold uppercase tracking-tight text-white/45 transition-all duration-300 group-hover:border-cyan-400/20 group-hover:text-cyan-300"
+                      >
                         {typeof Icon === "string" ? (
                           Icon
                         ) : (
                           <Icon size={16} strokeWidth={1.6} />
                         )}
-                      </div>
+                      </motion.div>
 
                       <div className="min-w-0">
                         <p className="text-xs font-medium text-white/65">
@@ -280,22 +507,72 @@ const Contact = () => {
           {/* =================================
               Contact Form
           ================================== */}
+
           <motion.div
-            initial={{ opacity: 0, x: 35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.1,
-              ease: [0.22, 1, 0.36, 1],
+            variants={formReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: false,
+              amount: 0.2,
             }}
-            className="relative overflow-hidden border border-white/10 bg-white/[0.025] p-5 backdrop-blur-xl sm:p-7 lg:p-8"
+            whileHover={{
+              y: -3,
+              transition: {
+                duration: 0.35,
+                ease: "easeOut",
+              },
+            }}
+            className="group/form relative overflow-hidden border border-white/10 bg-white/[0.025] p-5 backdrop-blur-xl transition-colors duration-500 hover:border-white/15 sm:p-7 lg:p-8"
           >
             {/* Form Glow */}
-            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-400/[0.035] blur-[90px]" />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: false }}
+              transition={{
+                duration: 1.2,
+                delay: 0.3,
+              }}
+              className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-400/[0.035] blur-[90px]"
+            />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: false }}
+              transition={{
+                duration: 1.2,
+                delay: 0.5,
+              }}
+              className="pointer-events-none absolute -bottom-28 -left-28 h-56 w-56 rounded-full bg-violet-500/[0.025] blur-[90px]"
+            />
+
+            {/* Animated Border */}
+
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: false }}
+              transition={{
+                duration: 1,
+                delay: 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="absolute left-0 right-0 top-0 h-px origin-left bg-gradient-to-r from-cyan-400 via-violet-400 to-transparent"
+            />
 
             <div className="relative">
-              <div className="mb-7">
+
+              <motion.div
+                custom={0}
+                variants={formItemReveal}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                className="mb-7"
+              >
                 <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
                   {t.contact.sendMessageTitle}
                 </p>
@@ -303,11 +580,23 @@ const Contact = () => {
                 <p className="mt-2 text-sm text-white/40">
                   {t.contact.sendMessageDescription}
                 </p>
-              </div>
+              </motion.div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
+
                 {/* Name */}
-                <div>
+
+                <motion.div
+                  custom={1}
+                  variants={formItemReveal}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.2 }}
+                  className="group/input"
+                >
                   <label
                     htmlFor="name"
                     className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
@@ -315,21 +604,33 @@ const Contact = () => {
                     {t.contact.form.name}
                   </label>
 
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder={t.contact.form.namePlaceholder}
-                    required
-                    disabled={isSubmitting}
-                    className="w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </div>
+                  <div className="relative">
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder={t.contact.form.namePlaceholder}
+                      required
+                      disabled={isSubmitting}
+                      className="peer w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+
+                    <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
+                  </div>
+                </motion.div>
 
                 {/* Email */}
-                <div>
+
+                <motion.div
+                  custom={2}
+                  variants={formItemReveal}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.2 }}
+                  className="group/input"
+                >
                   <label
                     htmlFor="email"
                     className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
@@ -337,21 +638,33 @@ const Contact = () => {
                     {t.contact.form.email}
                   </label>
 
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={t.contact.form.emailPlaceholder}
-                    required
-                    disabled={isSubmitting}
-                    className="w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </div>
+                  <div className="relative">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder={t.contact.form.emailPlaceholder}
+                      required
+                      disabled={isSubmitting}
+                      className="peer w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+
+                    <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
+                  </div>
+                </motion.div>
 
                 {/* Message */}
-                <div>
+
+                <motion.div
+                  custom={3}
+                  variants={formItemReveal}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.2 }}
+                  className="group/input"
+                >
                   <label
                     htmlFor="message"
                     className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
@@ -359,24 +672,43 @@ const Contact = () => {
                     {t.contact.form.message}
                   </label>
 
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder={t.contact.form.messagePlaceholder}
-                    rows={6}
-                    required
-                    disabled={isSubmitting}
-                    className="w-full resize-none border border-white/10 bg-black/20 px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </div>
+                  <div className="relative">
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder={
+                        t.contact.form.messagePlaceholder
+                      }
+                      rows={6}
+                      required
+                      disabled={isSubmitting}
+                      className="peer w-full resize-none border border-white/10 bg-black/20 px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+
+                    <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
+                  </div>
+                </motion.div>
 
                 {/* Status Message */}
+
                 {status.message && (
                   <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{
+                      opacity: 0,
+                      y: -10,
+                      scale: 0.97,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className={`border px-4 py-3 text-sm ${
                       status.type === "success"
                         ? "border-emerald-400/20 bg-emerald-400/[0.05] text-emerald-300"
@@ -388,14 +720,44 @@ const Contact = () => {
                 )}
 
                 {/* Submit */}
+
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  whileHover={!isSubmitting ? { y: -2 } : {}}
-                  whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                  className="group flex w-full items-center justify-center gap-2 border border-white/15 bg-white px-5 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+                  whileHover={
+                    !isSubmitting
+                      ? {
+                          y: -3,
+                          scale: 1.005,
+                        }
+                      : {}
+                  }
+                  whileTap={
+                    !isSubmitting
+                      ? {
+                          scale: 0.98,
+                        }
+                      : {}
+                  }
+                  transition={{
+                    duration: 0.25,
+                    ease: "easeOut",
+                  }}
+                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden border border-white/15 bg-white px-5 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <span>
+                  {/* Button Shine */}
+
+                  <motion.span
+                    initial={{ x: "-120%" }}
+                    whileHover={{ x: "120%" }}
+                    transition={{
+                      duration: 0.7,
+                      ease: "easeInOut",
+                    }}
+                    className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12 bg-black/[0.06]"
+                  />
+
+                  <span className="relative z-10">
                     {isSubmitting
                       ? t.contact.form.sending
                       : t.contact.form.send}
@@ -404,7 +766,7 @@ const Contact = () => {
                   <Send
                     size={16}
                     strokeWidth={1.8}
-                    className={`transition-transform duration-300 ${
+                    className={`relative z-10 transition-transform duration-300 ${
                       isSubmitting
                         ? "animate-pulse"
                         : "group-hover:translate-x-1 group-hover:-translate-y-1"
@@ -419,13 +781,26 @@ const Contact = () => {
         {/* =================================
             Footer
         ================================== */}
+
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{
+            opacity: 0,
+            y: 18,
+            filter: "blur(5px)",
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+          }}
+          viewport={{
+            once: false,
+            amount: 0.2,
+          }}
           transition={{
-            duration: 0.6,
+            duration: 0.65,
             delay: 0.2,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="mt-20 flex flex-col gap-4 border-t border-white/5 pt-6 sm:flex-row sm:items-center sm:justify-between"
         >
@@ -453,4 +828,3 @@ const Contact = () => {
 };
 
 export default Contact;
-

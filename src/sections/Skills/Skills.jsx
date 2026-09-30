@@ -1,4 +1,4 @@
-
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Code2,
@@ -88,9 +88,167 @@ const tools = [
   },
 ];
 
+/* =================================
+   Card Entrance Directions
+================================== */
+const cardDirections = [
+  {
+    x: -120,
+    y: -90,
+    rotate: -8,
+  },
+  {
+    x: 120,
+    y: -90,
+    rotate: 8,
+  },
+  {
+    x: -120,
+    y: 90,
+    rotate: 8,
+  },
+  {
+    x: 120,
+    y: 90,
+    rotate: -8,
+  },
+];
+
+/* =================================
+   Section Heading Animation
+================================== */
+const headingVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+/* =================================
+   Skill Badge Animation
+================================== */
+const skillItemVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.85,
+    y: 10,
+  },
+
+  visible: (index) => ({
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.35,
+      delay: index * 0.045,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+/* =================================
+   Get Initial Animation Order
+================================== */
+const getInitialAnimationStart = () => {
+  if (typeof window === "undefined") {
+    return 0;
+  }
+
+  const hash = window.location.hash;
+
+  const clickedIndex = skillGroups.findIndex(
+    (group) => `#${group.id}` === hash,
+  );
+
+  return clickedIndex >= 0 ? clickedIndex : 0;
+};
+
+/* =================================
+   Get Sequential Order
+================================== */
+const getAnimationOrder = (startIndex) => {
+  return Array.from(
+    { length: skillGroups.length },
+    (_, index) => (startIndex + index) % skillGroups.length,
+  );
+};
+
 const Skills = () => {
   const { language } = useLanguage();
   const t = translations[language];
+
+  const isBangla = language === "BN";
+
+  const [animationStart, setAnimationStart] = useState(
+    getInitialAnimationStart,
+  );
+
+  const [animationCycle, setAnimationCycle] = useState(0);
+
+  /* =================================
+     Detect About Card Click
+  ================================== */
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+
+      const clickedIndex = skillGroups.findIndex(
+        (group) => `#${group.id}` === hash,
+      );
+
+      if (clickedIndex >= 0) {
+        setAnimationStart(clickedIndex);
+
+        /*
+          Changing cycle forces the cards to
+          mount again and replay the animation.
+        */
+        setAnimationCycle((prev) => prev + 1);
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
+  /*
+    Example:
+
+    Frontend click:
+    0 → 1 → 2 → 3
+
+    Backend click:
+    1 → 2 → 3 → 0
+
+    Database click:
+    2 → 3 → 0 → 1
+
+    Full Stack click:
+    3 → 0 → 1 → 2
+  */
+  const animationOrder = getAnimationOrder(animationStart);
+
+  const getCardDelay = (cardIndex) => {
+    const sequenceIndex = animationOrder.indexOf(cardIndex);
+
+    /*
+      Each card waits for the previous card
+      to almost finish before entering.
+    */
+    return sequenceIndex * 0.95;
+  };
 
   return (
     <section
@@ -106,46 +264,73 @@ const Skills = () => {
 
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-pink-500/[0.025] blur-[120px]" />
 
+      {/* =================================
+          Main Container
+      ================================== */}
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* =================================
             Section Heading
         ================================== */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{
-            duration: 0.7,
-            ease: [0.22, 1, 0.36, 1],
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: false,
+            amount: 0.25,
+          }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.12,
+              },
+            },
           }}
           className="mb-14 max-w-3xl"
         >
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-8 bg-gradient-to-r from-cyan-400 to-violet-400" />
+          {/* Badge */}
+          <motion.div
+            variants={headingVariants}
+            className="mb-5 flex items-center gap-3"
+          >
+            <span className="h-px w-8 bg-gradient-to-r from-cyan-400 to-violet-400 sm:w-12" />
 
             <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent">
               {t.skills.badge}
             </span>
-          </div>
+          </motion.div>
 
-          <h2 className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl">
-            {language === "BN"
+          {/* Heading */}
+          <motion.h2
+            variants={headingVariants}
+            className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl"
+          >
+            {isBangla
               ? "আমি যেসব টুল ব্যবহার করি "
               : "Tools I use to build "}
+
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
-              {language === "BN"
+              {isBangla
                 ? "ডিজিটাল প্রোডাক্ট।"
                 : "digital products."}
             </span>
-          </h2>
+          </motion.h2>
 
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/40 sm:text-base">
-            {language === "BN"
+          {/* Description */}
+          <motion.p
+            variants={headingVariants}
+            className="mt-5 max-w-2xl text-sm leading-7 text-white/40 sm:text-base"
+          >
+            {isBangla
               ? "ফ্রন্টএন্ড, ব্যাকএন্ড, ডেটাবেস এবং ফুল-স্ট্যাক ডেভেলপমেন্টে আমি যেসব প্রযুক্তি ও টুল ব্যবহার করি।"
               : "A practical set of technologies and tools I use across frontend, backend, database and full-stack development."}
-          </p>
+          </motion.p>
 
-          <div className="mt-5 h-px w-24 bg-gradient-to-r from-cyan-400 via-blue-400 to-transparent" />
+          {/* Accent */}
+          <motion.div
+            variants={headingVariants}
+            className="mt-5 h-px w-24 bg-gradient-to-r from-cyan-400 via-blue-400 to-transparent"
+          />
         </motion.div>
 
         {/* =================================
@@ -155,85 +340,185 @@ const Skills = () => {
           {skillGroups.map((group, index) => {
             const Icon = group.icon;
             const groupTranslation = t.skills[group.key];
+            const direction = cardDirections[index];
+
+            const cardDelay = getCardDelay(index);
 
             return (
               <motion.div
                 id={group.id}
-                key={group.key}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
+                key={`${group.key}-${animationCycle}`}
+                initial={{
+                  opacity: 0,
+                  x: direction.x,
+                  y: direction.y,
+                  scale: 0.8,
+                  rotate: direction.rotate,
+                  filter: "blur(8px)",
                 }}
-                whileHover={{ y: -4 }}
-                className="group relative scroll-mt-28 overflow-hidden border border-white/10 bg-white/[0.025] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/15 hover:bg-white/[0.04] sm:p-7"
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  rotate: 0,
+                  filter: "blur(0px)",
+                }}
+                viewport={{
+                  once: false,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.85,
+                  delay: cardDelay,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="scroll-mt-28"
               >
-                {/* Glow */}
-                <div
-                  className={`pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full ${group.glow} blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
-                />
+                {/* =================================
+                    Floating Card
+                ================================== */}
+                <motion.div
+                  animate={{
+                    y: [0, -4, 0, 4, 0],
+                    rotate: [0, 0.2, 0, -0.2, 0],
+                  }}
+                  transition={{
+                    duration: 5.5 + index * 0.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: cardDelay + 1.2,
+                  }}
+                  whileHover={{
+                    y: -7,
+                    scale: 1.012,
+                    transition: {
+                      duration: 0.25,
+                      ease: "easeOut",
+                    },
+                  }}
+                  className="group relative h-full overflow-hidden border border-white/10 bg-white/[0.025] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/15 hover:bg-white/[0.04] sm:p-7"
+                >
+                  {/* Glow */}
+                  <div
+                    className={`pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full ${group.glow} blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                  />
 
-                {/* Shine */}
-                <div className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent opacity-0 transition-all duration-700 group-hover:left-[130%] group-hover:opacity-100" />
+                  {/* Shine */}
+                  <div className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent opacity-0 transition-all duration-700 group-hover:left-[130%] group-hover:opacity-100" />
 
-                <div className="relative">
-                  {/* Card Header */}
-                  <div className="flex items-start justify-between">
-                    <div
-                      className={`flex h-12 w-12 items-center justify-center border border-white/10 bg-gradient-to-br ${group.gradient} bg-clip-border text-white transition-all duration-300 group-hover:border-white/20`}
-                    >
-                      <Icon size={21} strokeWidth={1.7} />
+                  <div className="relative">
+                    {/* Card Header */}
+                    <div className="flex items-start justify-between">
+                      <motion.div
+                        initial={{
+                          opacity: 0,
+                          scale: 0.7,
+                          rotate: -10,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                          rotate: 0,
+                        }}
+                        viewport={{
+                          once: false,
+                          amount: 0.2,
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          delay: cardDelay + 0.2,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className={`flex h-12 w-12 items-center justify-center border border-white/10 bg-gradient-to-br ${group.gradient} bg-clip-border text-white transition-all duration-300 group-hover:border-white/20`}
+                      >
+                        <Icon size={21} strokeWidth={1.7} />
+                      </motion.div>
+
+                      <span
+                        className={`bg-gradient-to-r ${group.gradient} bg-clip-text text-[10px] font-semibold uppercase tracking-[0.18em] text-transparent`}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
                     </div>
 
-                    <span
-                      className={`bg-gradient-to-r ${group.gradient} bg-clip-text text-[10px] font-semibold uppercase tracking-[0.18em] text-transparent`}
+                    {/* Title */}
+                    <motion.h3
+                      initial={{
+                        opacity: 0,
+                        x: -15,
+                      }}
+                      whileInView={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      viewport={{
+                        once: false,
+                        amount: 0.2,
+                      }}
+                      transition={{
+                        duration: 0.5,
+                        delay: cardDelay + 0.25,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className={`mt-6 bg-gradient-to-r ${group.gradient} bg-clip-text text-xl font-semibold text-transparent`}
                     >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                      {groupTranslation.title}
+                    </motion.h3>
+
+                    {/* Subtitle */}
+                    <motion.p
+                      initial={{
+                        opacity: 0,
+                        y: 10,
+                      }}
+                      whileInView={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      viewport={{
+                        once: false,
+                        amount: 0.2,
+                      }}
+                      transition={{
+                        duration: 0.45,
+                        delay: cardDelay + 0.3,
+                      }}
+                      className="mt-2 text-sm text-white/35"
+                    >
+                      {groupTranslation.subtitle}
+                    </motion.p>
+
+                    {/* Skills */}
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {group.skills.map((skill, skillIndex) => (
+                        <motion.div
+                          key={skill}
+                          custom={skillIndex}
+                          variants={skillItemVariants}
+                          initial="hidden"
+                          whileInView="visible"
+                          viewport={{
+                            once: false,
+                            amount: 0.15,
+                          }}
+                          className="group/skill inline-flex items-center gap-2 border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/55 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
+                        >
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${group.gradient} opacity-70`}
+                          />
+
+                          {skill}
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Bottom Accent */}
+                    <div
+                      className={`mt-7 h-px w-14 bg-gradient-to-r ${group.gradient} opacity-40 transition-all duration-300 group-hover:w-24 group-hover:opacity-80`}
+                    />
                   </div>
-
-                  {/* Title */}
-                  <h3
-                    className={`mt-6 bg-gradient-to-r ${group.gradient} bg-clip-text text-xl font-semibold text-transparent`}
-                  >
-                    {groupTranslation.title}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-white/35">
-                    {groupTranslation.subtitle}
-                  </p>
-
-                  {/* Skills */}
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {group.skills.map((skill, skillIndex) => (
-                      <motion.div
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.35,
-                          delay: index * 0.08 + skillIndex * 0.04,
-                        }}
-                        className="group/skill inline-flex items-center gap-2 border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/55 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${group.gradient} opacity-70`}
-                        />
-
-                        {skill}
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Bottom Accent */}
-                  <div
-                    className={`mt-7 h-px w-14 bg-gradient-to-r ${group.gradient} opacity-40 transition-all duration-300 group-hover:w-24 group-hover:opacity-80`}
-                  />
-                </div>
+                </motion.div>
               </motion.div>
             );
           })}
@@ -243,9 +528,18 @@ const Skills = () => {
             Tools
         ================================== */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: false,
+            amount: 0.2,
+          }}
           transition={{
             duration: 0.7,
             delay: 0.15,
@@ -253,26 +547,72 @@ const Skills = () => {
           }}
           className="mt-4 grid gap-4 md:grid-cols-2"
         >
-          {tools.map((tool) => {
+          {tools.map((tool, index) => {
             const Icon = tool.icon;
+
             const toolTitle =
               tool.key === "uiStyling"
                 ? t.skills.tools.uiStyling
                 : t.skills.tools.developmentTools;
 
             return (
-              <div
+              <motion.div
                 key={tool.key}
+                initial={{
+                  opacity: 0,
+                  x: index === 0 ? -60 : 60,
+                  scale: 0.92,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                }}
+                viewport={{
+                  once: false,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.7,
+                  delay: index * 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={{
+                  y: -5,
+                  transition: {
+                    duration: 0.25,
+                  },
+                }}
                 className="group relative overflow-hidden border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]"
               >
+                {/* Glow */}
                 <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-cyan-400/[0.04] blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                 <div className="relative flex items-start gap-4">
-                  <div
+                  {/* Icon */}
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      scale: 0.7,
+                      rotate: -8,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      scale: 1,
+                      rotate: 0,
+                    }}
+                    viewport={{
+                      once: false,
+                      amount: 0.2,
+                    }}
+                    transition={{
+                      duration: 0.45,
+                      delay: index * 0.12 + 0.15,
+                    }}
                     className={`flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 bg-white/[0.03] bg-gradient-to-br ${tool.gradient} bg-clip-border text-white`}
                   >
                     <Icon size={18} strokeWidth={1.7} />
-                  </div>
+                  </motion.div>
 
                   <div>
                     <h3 className="text-sm font-semibold text-white">
@@ -283,7 +623,7 @@ const Skills = () => {
                       {tool.items.map((item) => {
                         let translatedItem = item;
 
-                        if (language === "BN") {
+                        if (isBangla) {
                           const itemTranslations = {
                             "Responsive Design": "রেসপন্সিভ ডিজাইন",
                           };
@@ -310,7 +650,7 @@ const Skills = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </motion.div>
@@ -321,9 +661,18 @@ const Skills = () => {
       ================================== */}
       <motion.a
         href="#projects"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: false,
+          amount: 0.2,
+        }}
         transition={{
           duration: 0.6,
           delay: 0.35,
@@ -386,4 +735,3 @@ const Skills = () => {
 };
 
 export default Skills;
-

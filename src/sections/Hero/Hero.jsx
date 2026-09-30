@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowRight, Code2, Mail } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
@@ -21,6 +20,23 @@ const socialLinks = [
   },
 ];
 
+const textReveal = {
+  hidden: {
+    opacity: 0,
+    y: 10,
+    filter: "blur(4px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 const Hero = () => {
   const { language } = useLanguage();
 
@@ -29,587 +45,778 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden"
+      className="relative flex min-h-screen items-center overflow-hidden bg-[#050505]"
     >
-      {/* Background Glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/3 h-80 w-80 -translate-x-1/2 rounded-full bg-white/[0.04] blur-3xl" />
+      {/* =====================================
+          Ambient Background
+      ====================================== */}
 
-        <div className="absolute right-0 top-1/4 h-64 w-64 rounded-full bg-white/[0.03] blur-3xl" />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[48%] top-[30%] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-cyan-400/[0.045] blur-[130px]" />
+
+        <div className="absolute -right-32 top-1/4 h-[420px] w-[420px] rounded-full bg-violet-500/[0.035] blur-[120px]" />
+
+        <div className="absolute -bottom-40 left-1/4 h-[420px] w-[420px] rounded-full bg-cyan-500/[0.02] blur-[120px]" />
       </div>
 
-      {/* Background Grid */}
+      {/* =====================================
+          Fine Grid
+      ====================================== */}
+
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "70px 70px",
+            "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 pb-20 pt-32 sm:px-6 lg:px-8 lg:pb-24 lg:pt-40">
-        <div className="max-w-4xl">
-          {/* Availability */}
+      {/* =====================================
+          Top Border Detail
+      ====================================== */}
+
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      {/* =====================================
+          Main Container
+      ====================================== */}
+
+      <div className="relative mx-auto w-full max-w-[1500px] px-5 pb-20 pt-32 sm:px-8 lg:px-12 lg:pb-24 lg:pt-36 xl:px-16">
+        <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:gap-10 xl:gap-20">
+          {/* =====================================
+              LEFT CONTENT
+          ====================================== */}
+
+          <div className="max-w-5xl">
+            {/* Availability */}
+
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mb-8 inline-flex items-center gap-3 border border-white/10 bg-white/[0.025] px-3.5 py-2 backdrop-blur-md"
+            >
+              <motion.span
+                animate={{
+                  scale: [1, 1.25, 1],
+                  opacity: [1, 0.55, 1],
+                }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]"
+              />
+
+              <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/55">
+                {isBangla
+                  ? "নতুন সুযোগের জন্য উপলব্ধ"
+                  : "Available for opportunities"}
+              </span>
+            </motion.div>
+
+            {/* =====================================
+                Heading
+            ====================================== */}
+
+            <motion.h1
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.08,
+                  },
+                },
+              }}
+              className="max-w-4xl text-[clamp(2.35rem,4.7vw,5rem)] font-medium leading-[0.98] tracking-[-0.05em]"
+            >
+              {isBangla ? (
+                <>
+                  {/* তৈরি করছি */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block text-white"
+                  >
+                    তৈরি করছি
+                  </motion.span>
+
+                  {/* ডিজিটাল */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent"
+                  >
+                    ডিজিটাল
+                  </motion.span>
+
+                  {/* অভিজ্ঞতা */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block text-white"
+                  >
+                    অভিজ্ঞতা
+                  </motion.span>
+
+                  {/* যা */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="inline-block text-violet-300/80"
+                  >
+                    যা
+                  </motion.span>
+
+                  {/* সত্যিই কাজ করে */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mt-3 block bg-gradient-to-r from-violet-300 to-cyan-300 bg-clip-text text-transparent"
+                  >
+                    সত্যিই কাজ করে।
+                  </motion.span>
+                </>
+              ) : (
+                <>
+                  {/* Building */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block text-white"
+                  >
+                    Building
+                  </motion.span>
+
+                  {/* digital */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent"
+                  >
+                    digital
+                  </motion.span>
+
+                  {/* experiences */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mr-3 inline-block text-white"
+                  >
+                    experiences
+                  </motion.span>
+
+                  {/* that */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="inline-block text-violet-300/80"
+                  >
+                    that
+                  </motion.span>
+
+                  {/* actually work */}
+
+                  <motion.span
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 30,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                    className="mt-3 block bg-gradient-to-r from-violet-300 to-cyan-300 bg-clip-text text-transparent"
+                  >
+                    actually work.
+                  </motion.span>
+                </>
+              )}
+            </motion.h1>
+
+            {/* =====================================
+                Description
+            ====================================== */}
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.72,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className={`mt-8 max-w-2xl text-[15px] leading-7 text-white/45 sm:text-base sm:leading-8 lg:text-[17px] ${
+                isBangla ? "leading-8 sm:leading-9" : ""
+              }`}
+            >
+              {isBangla ? (
+                <>
+                  <motion.span variants={textReveal}>
+                    আমি{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-cyan-300"
+                  >
+                    সিয়াম তালুকদার
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    , একজন{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-semibold text-violet-300"
+                  >
+                    MERN Stack Developer
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    যিনি{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="text-cyan-300/90"
+                  >
+                    আধুনিক, রেসপন্সিভ এবং স্কেলেবল
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    ওয়েব অ্যাপ্লিকেশন তৈরি করতে{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-cyan-300"
+                  >
+                    frontend
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    থেকে{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-violet-300"
+                  >
+                    backend
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    পর্যন্ত কাজ করেন।
+                  </motion.span>
+                </>
+              ) : (
+                <>
+                  <motion.span variants={textReveal}>
+                    I’m{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-cyan-300"
+                  >
+                    Siam Talukder
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    , a{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-semibold text-violet-300"
+                  >
+                    MERN Stack Developer
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    focused on building{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-cyan-300/90"
+                  >
+                    modern, responsive and scalable
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    web applications from{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-cyan-300"
+                  >
+                    frontend
+                  </motion.span>
+
+                  <motion.span variants={textReveal}>
+                    {" "}
+                    to{" "}
+                  </motion.span>
+
+                  <motion.span
+                    variants={textReveal}
+                    className="font-medium text-violet-300"
+                  >
+                    backend
+                  </motion.span>
+                  <motion.span variants={textReveal}>
+                    .
+                  </motion.span>
+                </>
+              )}
+            </motion.p>
+
+            {/* =====================================
+                Buttons
+            ====================================== */}
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.9,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mt-9 flex flex-col gap-3 sm:flex-row"
+            >
+              {/* View Work */}
+
+              <motion.a
+                href="#projects"
+                whileHover={{
+                  y: -3,
+                  boxShadow: "0 10px 35px rgba(103, 232, 249, 0.12)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                className="group inline-flex items-center justify-center gap-3 border border-white/15 bg-white px-6 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-cyan-300"
+              >
+                <span>
+                  {isBangla ? "আমার কাজ দেখুন" : "View My Work"}
+                </span>
+
+                <ArrowRight
+                  size={16}
+                  strokeWidth={2}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </motion.a>
+
+              {/* Contact */}
+
+              <motion.a
+                href="#contact"
+                whileHover={{
+                  y: -3,
+                  boxShadow: "0 10px 35px rgba(167, 139, 250, 0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                className="group inline-flex items-center justify-center gap-3 border border-white/10 bg-white/[0.025] px-6 py-3.5 text-sm font-medium text-white/70 backdrop-blur-sm transition-all duration-300 hover:border-violet-300/30 hover:bg-violet-300/[0.05] hover:text-white"
+              >
+                <span>
+                  {isBangla ? "যোগাযোগ করুন" : "Let’s Connect"}
+                </span>
+
+                <ArrowRight
+                  size={16}
+                  strokeWidth={1.8}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </motion.a>
+            </motion.div>
+
+            {/* =====================================
+                Social Links
+            ====================================== */}
+
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 1.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mt-10 flex items-center gap-2"
+            >
+              {socialLinks.map((social, index) => {
+                const Icon = social.icon;
+
+                return (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    target={
+                      social.label !== "Email" ? "_blank" : undefined
+                    }
+                    rel={
+                      social.label !== "Email"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    aria-label={social.label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 1.1 + index * 0.08,
+                    }}
+                    whileHover={{
+                      y: -4,
+                      scale: 1.04,
+                    }}
+                    whileTap={{
+                      scale: 0.94,
+                    }}
+                    className="group flex h-10 w-10 items-center justify-center border border-white/10 bg-white/[0.02] text-white/35 transition-all duration-300 hover:border-cyan-300/30 hover:bg-cyan-300/[0.05] hover:text-cyan-300"
+                  >
+                    <Icon
+                      size={17}
+                      strokeWidth={1.6}
+                      className="transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </motion.a>
+                );
+              })}
+            </motion.div>
+          </div>
+
+          {/* =====================================
+              RIGHT VISUAL
+          ====================================== */}
+
           <motion.div
-            initial={{ opacity: 0, y: 18, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.94, x: 30 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{
-              duration: 0.7,
-              delay: 0.15,
+              duration: 1,
+              delay: 0.45,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="group relative mb-7 inline-flex items-center gap-2 overflow-hidden border border-cyan-400/20 bg-white/[0.03] px-3 py-2 backdrop-blur-sm"
+            className="relative hidden min-h-[500px] items-center justify-center lg:flex"
           >
-            {/* Animated glow */}
+            {/* Outer ring */}
+
             <motion.div
               animate={{
-                x: ["-120%", "220%"],
+                rotate: 360,
               }}
               transition={{
-                duration: 2.8,
+                duration: 35,
                 repeat: Infinity,
-                repeatDelay: 1.5,
-                ease: "easeInOut",
+                ease: "linear",
               }}
-              className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent blur-sm"
+              className="absolute h-[370px] w-[370px] rounded-full border border-white/[0.06]"
             />
 
-            {/* Animated status dot */}
-            <motion.span
+            <motion.div
               animate={{
-                scale: [1, 1.3, 1],
-                opacity: [1, 0.6, 1],
-                boxShadow: [
-                  "0 0 0px rgba(34,211,238,0)",
-                  "0 0 12px rgba(34,211,238,0.7)",
-                  "0 0 0px rgba(34,211,238,0)",
-                ],
+                rotate: -360,
               }}
               transition={{
-                duration: 1.8,
+                duration: 45,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="absolute h-[280px] w-[280px] rounded-full border border-cyan-300/[0.08]"
+            />
+
+            {/* Main card */}
+
+            <motion.div
+              whileHover={{
+                scale: 1.015,
+              }}
+              transition={{
+                duration: 0.4,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="relative h-[330px] w-[330px] border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md"
+            >
+              {/* Inner border */}
+
+              <div className="relative flex h-full w-full items-center justify-center overflow-hidden border border-white/[0.07]">
+                {/* Center glow */}
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.15, 1],
+                    opacity: [0.5, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute h-44 w-44 rounded-full bg-cyan-400/[0.08] blur-[70px]"
+                />
+
+                {/* Profile Image */}
+
+                <motion.div
+                  animate={{
+                    y: [0, -7, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="relative z-10 h-full w-full"
+                >
+                  <img
+                    src="/siam.jpeg"
+                    alt="Siam Talukder"
+                    className="h-full w-full object-cover"
+                  />
+                </motion.div>
+
+                {/* Corner labels */}
+
+                <span className="absolute left-4 top-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                  MERN
+                </span>
+
+                <span className="absolute right-4 top-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-300/55">
+                  DEV
+                </span>
+
+                <span className="absolute bottom-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                  2026
+                </span>
+
+                <span className="absolute bottom-4 right-4 z-20 font-mono text-[9px] uppercase tracking-[0.16em] text-violet-300/55">
+                  SIAM
+                </span>
+
+                {/* Image overlay */}
+
+                <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+              </div>
+            </motion.div>
+
+            {/* Floating status */}
+
+            <motion.div
+              animate={{
+                y: [0, -6, 0],
+              }}
+              transition={{
+                duration: 3.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="relative z-10 h-2 w-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500"
-            />
-
-            {/* Text */}
-            <span className="relative z-10 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-medium tracking-wide text-transparent">
-              {isBangla
-                ? "নতুন সুযোগের জন্য উপলব্ধ"
-                : "Available for opportunities"}
-            </span>
-          </motion.div>
-
-          {/* Heading */}
-          <motion.h1
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.12,
-                },
-              },
-            }}
-            className="text-4xl font-semibold leading-[1.08] tracking-[-0.035em] sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            {isBangla ? (
-              <>
-                {/* Bangla: তৈরি করছি */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mr-3 inline-block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
-                >
-                  তৈরি করছি
-                </motion.span>
-
-                {/* Bangla: ডিজিটাল */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="inline-block bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent"
-                >
-                  ডিজিটাল
-                </motion.span>
-
-                {/* Bangla: অভিজ্ঞতা */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mr-3 mt-2 inline-block bg-gradient-to-r from-violet-400 to-purple-500 bg-clip-text text-transparent"
-                >
-                  অভিজ্ঞতা
-                </motion.span>
-
-                {/* Bangla: যা */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="inline-block bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
-                >
-                  যা
-                </motion.span>
-
-                {/* Bangla: সত্যিই কাজ করে */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mt-2 block bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
-                >
-                  সত্যিই কাজ করে।
-                </motion.span>
-              </>
-            ) : (
-              <>
-                {/* Building */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mr-3 inline-block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
-                >
-                  Building
-                </motion.span>
-
-                {/* digital */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="inline-block bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent"
-                >
-                  digital
-                </motion.span>
-
-                {/* experiences */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mr-3 mt-2 inline-block bg-gradient-to-r from-violet-400 to-purple-500 bg-clip-text text-transparent"
-                >
-                  experiences
-                </motion.span>
-
-                {/* that */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="inline-block bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
-                >
-                  that
-                </motion.span>
-
-                {/* actually work */}
-                <motion.span
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 30,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.7,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  className="mt-2 block bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
-                >
-                  actually work.
-                </motion.span>
-              </>
-            )}
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.7,
-              delay: 0.75,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className={`mt-7 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8 ${
-              isBangla ? "leading-8 sm:leading-9" : ""
-            }`}
-          >
-            {isBangla ? (
-              <>
-                <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                  আমি
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-                  সিয়াম তালুকদার,
-                </span>{" "}
-                <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text font-medium text-transparent">
-                  একজন
-                </span>{" "}
-                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text font-semibold text-transparent">
-                  MERN Stack Developer
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                  যিনি
-                </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text font-semibold text-transparent">
-                  আধুনিক,
-                </span>{" "}
-                <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text font-semibold text-transparent">
-                  রেসপন্সিভ
-                </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                  এবং
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text font-semibold text-transparent">
-                  স্কেলেবল
-                </span>{" "}
-                <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-                  ওয়েব অ্যাপ্লিকেশন
-                </span>{" "}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  তৈরি করতে
-                </span>{" "}
-                <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-                  frontend
-                </span>{" "}
-                <span className="bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent">
-                  থেকে
-                </span>{" "}
-                <span className="bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text font-semibold text-transparent">
-                  backend
-                </span>{" "}
-                <span className="bg-gradient-to-r from-yellow-400 to-emerald-400 bg-clip-text text-transparent">
-                  পর্যন্ত কাজ করেন।
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                  I’m
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-                  Siam
-                </span>{" "}
-                <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-                  Talukder,
-                </span>{" "}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text font-medium text-transparent">
-                  a
-                </span>{" "}
-                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text font-semibold text-transparent">
-                  MERN
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text font-semibold text-transparent">
-                  Stack
-                </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text font-semibold text-transparent">
-                  Developer
-                </span>{" "}
-                <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                  focused
-                </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                  on
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-                  building
-                </span>{" "}
-                <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-                  modern,
-                </span>{" "}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  responsive
-                </span>{" "}
-                <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-                  and
-                </span>{" "}
-                <span className="bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent">
-                  scalable
-                </span>{" "}
-                <span className="bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                  web
-                </span>{" "}
-                <span className="bg-gradient-to-r from-yellow-400 to-emerald-400 bg-clip-text text-transparent">
-                  applications
-                </span>{" "}
-                <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                  from
-                </span>{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                  frontend
-                </span>{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-                  to
-                </span>{" "}
-                <span className="bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
-                  backend.
-                </span>
-              </>
-            )}
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.7,
-              delay: 1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-          >
-            {/* View My Work */}
-            <motion.a
-              href="#projects"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2 }}
-              className="group relative inline-flex items-center justify-center gap-2 overflow-hidden border border-white/20 bg-gradient-to-r from-slate-900 via-blue-950 to-violet-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 transition-all duration-300 hover:border-cyan-300"
+              whileHover={{
+                scale: 1.03,
+              }}
+              className="absolute -bottom-2 left-4 border border-white/10 bg-[#080808]/90 px-4 py-3 backdrop-blur-xl"
             >
-              {/* Hover gradient */}
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 transition-transform duration-500 group-hover:translate-x-0" />
+              <div className="flex items-center gap-3">
+                <motion.span
+                  animate={{
+                    scale: [1, 1.25, 1],
+                    opacity: [1, 0.55, 1],
+                  }}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
+                />
 
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-black">
-                {isBangla ? "আমার কাজ দেখুন" : "View My Work"}
-              </span>
+                <span className="text-[10px] uppercase tracking-[0.16em] text-white/45">
+                  Building the web
+                </span>
+              </div>
+            </motion.div>
 
-              <ArrowRight
-                size={17}
-                strokeWidth={2}
-                className="relative z-10 transition-all duration-300 group-hover:translate-x-1 group-hover:text-black"
-              />
-            </motion.a>
+            {/* Floating stack */}
 
-            {/* Let's Connect */}
-            <motion.a
-              href="#contact"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2 }}
-              className="group inline-flex items-center justify-center gap-2 border border-white/10 bg-gradient-to-r from-slate-900 via-violet-950 to-blue-950 px-6 py-3 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/40 hover:bg-violet-400/5 hover:text-white"
+            <motion.div
+              animate={{
+                y: [0, 7, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              whileHover={{
+                scale: 1.03,
+              }}
+              className="absolute -right-2 top-12 border border-white/10 bg-[#080808]/90 px-4 py-3 backdrop-blur-xl"
             >
-              <span>
-                {isBangla ? "যোগাযোগ করুন" : "Let’s Connect"}
+              <span className="text-[10px] uppercase tracking-[0.16em] text-violet-300/60">
+                React · Node · MongoDB
               </span>
-
-              <ArrowRight
-                size={17}
-                strokeWidth={1.8}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </motion.a>
-          </motion.div>
-
-          {/* Social Links */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.12,
-                  delayChildren: 0.5,
-                },
-              },
-            }}
-            className="mt-12 flex items-center gap-3"
-          >
-            {socialLinks.map((social) => {
-              const Icon = social.icon;
-
-              return (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target={social.label !== "Email" ? "_blank" : undefined}
-                  rel={
-                    social.label !== "Email"
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                  aria-label={social.label}
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 12,
-                      scale: 0.9,
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                      transition: {
-                        duration: 0.5,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    },
-                  }}
-                  whileHover={{
-                    y: -4,
-                    scale: 1.08,
-                  }}
-                  whileTap={{
-                    scale: 0.94,
-                  }}
-                  className="group relative flex h-10 w-10 items-center justify-center overflow-hidden border border-white/10 bg-white/[0.03] text-white/40 backdrop-blur-sm transition-all duration-300 hover:border-cyan-400/30 hover:text-white"
-                >
-                  {/* Hover gradient */}
-                  <span className="absolute inset-0 -translate-y-full bg-gradient-to-br from-cyan-400/20 via-blue-500/15 to-violet-500/20 transition-transform duration-500 group-hover:translate-y-0" />
-
-                  {/* Icon */}
-                  <Icon
-                    size={18}
-                    strokeWidth={1.7}
-                    className="relative z-10 transition-all duration-300 group-hover:text-cyan-300"
-                  />
-
-                  {/* Glow */}
-                  <span className="pointer-events-none absolute inset-0 opacity-0 shadow-[0_0_20px_rgba(34,211,238,0.15)] transition-opacity duration-300 group-hover:opacity-100" />
-                </motion.a>
-              );
-            })}
+            </motion.div>
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* =====================================
+            Scroll Indicator
+        ====================================== */}
+
         <motion.a
           href="#about"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
             duration: 0.8,
-            delay: 1.2,
-            ease: [0.22, 1, 0.36, 1],
+            delay: 1.3,
           }}
-          className="group absolute bottom-8 right-4 hidden items-center gap-2 sm:flex lg:right-8"
+          className="group absolute bottom-7 right-5 hidden items-center gap-3 sm:flex lg:right-12 xl:right-16"
         >
-          <motion.span
-            animate={{
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-[length:200%_auto] bg-clip-text text-xs font-medium tracking-wide text-transparent"
-          >
+          <span className="text-[10px] uppercase tracking-[0.2em] text-white/25 transition-colors duration-300 group-hover:text-white/60">
             {isBangla ? "আরও দেখতে স্ক্রল করুন" : "Scroll to explore"}
-          </motion.span>
+          </span>
 
           <motion.span
             animate={{
@@ -620,9 +827,9 @@ const Hero = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="text-cyan-300 transition-colors duration-300 group-hover:text-violet-400"
+            className="text-cyan-300/60 transition-colors duration-300 group-hover:text-cyan-300"
           >
-            <ArrowDown size={15} strokeWidth={1.8} />
+            <ArrowDown size={14} strokeWidth={1.5} />
           </motion.span>
         </motion.a>
       </div>
@@ -631,4 +838,3 @@ const Hero = () => {
 };
 
 export default Hero;
-

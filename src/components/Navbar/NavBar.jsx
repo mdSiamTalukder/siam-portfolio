@@ -41,7 +41,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 24);
     };
 
     handleScroll();
@@ -75,7 +75,8 @@ const Navbar = () => {
         if (!section) continue;
 
         const sectionTop =
-          section.getBoundingClientRect().top + window.scrollY;
+          section.getBoundingClientRect().top +
+          window.scrollY;
 
         if (scrollPosition >= sectionTop) {
           currentSection = id;
@@ -94,8 +95,15 @@ const Navbar = () => {
     window.addEventListener("resize", handleActiveSection);
 
     return () => {
-      window.removeEventListener("scroll", handleActiveSection);
-      window.removeEventListener("resize", handleActiveSection);
+      window.removeEventListener(
+        "scroll",
+        handleActiveSection,
+      );
+
+      window.removeEventListener(
+        "resize",
+        handleActiveSection,
+      );
     };
   }, []);
 
@@ -116,23 +124,40 @@ const Navbar = () => {
   }, [isOpen]);
 
   /* =====================================
+     Close Dropdown on Outside Click
+  ====================================== */
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        isLanguageOpen &&
+        !event.target.closest("[data-language-menu]")
+      ) {
+        setIsLanguageOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick,
+      );
+    };
+  }, [isLanguageOpen]);
+
+  /* =====================================
      Navigation Click
   ====================================== */
 
   const handleNavClick = (href) => {
     const sectionId = href.replace("#", "");
 
-    // Close mobile menu
     setIsOpen(false);
-
-    // Close language dropdown
     setIsLanguageOpen(false);
-
-    // Update active section immediately
     setActiveSection(sectionId);
 
-    // Immediately unlock body scroll.
-    // This is important for mobile devices.
     document.body.style.overflow = "";
 
     const scrollToSection = () => {
@@ -140,18 +165,13 @@ const Navbar = () => {
 
       if (!section) return;
 
-      /*
-        Calculate navbar height dynamically.
-        This prevents the section from going underneath
-        the fixed navbar on mobile/tablet/desktop.
-      */
       const navbar = document.querySelector("header");
 
       const navbarHeight = navbar
         ? navbar.getBoundingClientRect().height
         : 90;
 
-      const extraSpacing = 16;
+      const extraSpacing = 20;
 
       const sectionPosition =
         section.getBoundingClientRect().top +
@@ -165,10 +185,6 @@ const Navbar = () => {
       });
     };
 
-    /*
-      Wait for the mobile menu closing animation/state update
-      before calculating the section position.
-    */
     if (window.innerWidth < 768) {
       setTimeout(() => {
         scrollToSection();
@@ -179,10 +195,6 @@ const Navbar = () => {
       });
     }
 
-    /*
-      Update hash without triggering browser's
-      default jump behavior.
-    */
     window.history.replaceState(null, "", href);
   };
 
@@ -193,6 +205,7 @@ const Navbar = () => {
   const handleLanguageChange = (code) => {
     setLanguage(code);
     setIsLanguageOpen(false);
+    setIsOpen(false);
   };
 
   /* =====================================
@@ -201,168 +214,350 @@ const Navbar = () => {
 
   const getNavLabel = (label) => {
     if (language === "BN") {
-      return {
-        Home: "হোম",
-        About: "আমার সম্পর্কে",
-        Skills: "দক্ষতা",
-        Projects: "প্রজেক্ট",
-        Contact: "যোগাযোগ",
-      }[label];
+      return (
+        {
+          Home: "হোম",
+          About: "আমার সম্পর্কে",
+          Skills: "দক্ষতা",
+          Projects: "প্রজেক্ট",
+          Contact: "যোগাযোগ",
+        }[label] || label
+      );
     }
 
     return label;
   };
 
+  /* =====================================
+     Theme Classes
+  ====================================== */
+
+  const navText = isLight
+    ? "text-black"
+    : "text-white";
+
+  const mutedText = isLight
+    ? "text-black/45"
+    : "text-white/45";
+
+  const borderColor = isLight
+    ? "border-black/10"
+    : "border-white/10";
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto max-w-7xl px-3 pt-3 sm:px-6 sm:pt-4 lg:px-8">
+      <div className="mx-auto px-3 pt-3 sm:px-5 sm:pt-4 lg:px-8">
         <motion.nav
+          initial={{
+            opacity: 0,
+            y: -18,
+          }}
           animate={{
+            opacity: 1,
+            y: 0,
             backgroundColor: isLight
               ? isScrolled
-                ? "rgba(255, 255, 255, 0.90)"
-                : "rgba(255, 255, 255, 0.72)"
+                ? "rgba(255,255,255,0.88)"
+                : "rgba(255,255,255,0.58)"
               : isScrolled
-                ? "rgba(8, 8, 8, 0.88)"
-                : "rgba(0, 0, 0, 0.62)",
-
+                ? "rgba(7,7,7,0.86)"
+                : "rgba(5,5,5,0.52)",
             borderColor: isLight
               ? isScrolled
-                ? "rgba(0,0,0,0.13)"
-                : "rgba(0,0,0,0.08)"
+                ? "rgba(0,0,0,0.12)"
+                : "rgba(0,0,0,0.07)"
               : isScrolled
                 ? "rgba(255,255,255,0.13)"
-                : "rgba(255,255,255,0.08)",
-
+                : "rgba(255,255,255,0.07)",
             boxShadow: isLight
               ? isScrolled
-                ? "0 18px 50px rgba(0,0,0,0.10)"
-                : "0 10px 35px rgba(0,0,0,0.06)"
+                ? "0 20px 60px rgba(0,0,0,0.10)"
+                : "0 10px 35px rgba(0,0,0,0.04)"
               : isScrolled
-                ? "0 18px 50px rgba(0,0,0,0.28)"
-                : "0 10px 35px rgba(0,0,0,0.12)",
+                ? "0 20px 60px rgba(0,0,0,0.32)"
+                : "0 10px 35px rgba(0,0,0,0.10)",
           }}
           transition={{
-            duration: 0.3,
-            ease: "easeOut",
+            opacity: {
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1],
+            },
+            y: {
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1],
+            },
+            backgroundColor: {
+              duration: 0.35,
+            },
+            borderColor: {
+              duration: 0.35,
+            },
+            boxShadow: {
+              duration: 0.35,
+            },
           }}
-          className="relative border px-3 py-3 backdrop-blur-2xl sm:px-5"
+          className={`relative mx-auto max-w-[1440px] overflow-visible border backdrop-blur-2xl ${
+            isScrolled
+              ? "rounded-2xl"
+              : "rounded-[20px]"
+          }`}
         >
           {/* =====================================
-              Top Navigation
+              Navbar Main Row
           ====================================== */}
 
-          <div className="flex items-center justify-between">
+          <div className="flex min-h-[66px] items-center justify-between px-4 sm:px-6 lg:px-7">
             {/* =================================
                 Logo
             ================================== */}
 
-            <button
+            <motion.button
               type="button"
               onClick={() => handleNavClick("#home")}
-              className="group flex items-center gap-2"
+              whileHover={{ x: 1 }}
+              whileTap={{ scale: 0.98 }}
+              className="group relative flex shrink-0 items-center"
               aria-label="Go to home"
             >
               <span
-                className={`relative flex h-8 w-8 items-center justify-center overflow-hidden border ${
-                  isLight
-                    ? "border-black/10 bg-black/[0.035]"
-                    : "border-white/10 bg-white/[0.035]"
-                }`}
-              >
-                <span className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-violet-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                <span
-                  className={`relative text-sm font-bold tracking-tight ${
-                    isLight ? "text-black" : "text-white"
-                  }`}
-                >
-                  S
-                </span>
-              </span>
-
-              <span
-                className={`text-lg font-bold tracking-[-0.03em] ${
-                  isLight ? "text-black" : "text-white"
-                }`}
+                className={`relative text-[19px] font-bold tracking-[-0.055em] sm:text-[21px] ${navText}`}
               >
                 Siam
-                <span className="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
                   .
                 </span>
               </span>
-            </button>
+
+              <span className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-500 group-hover:w-full" />
+            </motion.button>
 
             {/* =================================
                 Desktop Navigation
             ================================== */}
 
-            <div className="hidden items-center gap-1 md:flex">
-              {navigation.map((item) => {
-                const sectionId = item.href.replace("#", "");
-                const isActive = activeSection === sectionId;
+            <nav
+              className="hidden items-center md:flex"
+              aria-label="Primary navigation"
+            >
+              <div
+                className={`flex items-center gap-0.5 rounded-full border px-1 py-1 ${
+                  isLight
+                    ? "border-black/[0.07] bg-black/[0.025]"
+                    : "border-white/[0.07] bg-white/[0.025]"
+                }`}
+              >
+                {navigation.map((item) => {
+                  const sectionId =
+                    item.href.replace("#", "");
 
-                return (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => handleNavClick(item.href)}
-                    className="group relative px-3 py-2"
-                  >
-                    <span
-                      className={`relative z-10 text-[13px] font-medium transition-colors duration-300 ${
-                        isLight
-                          ? isActive
-                            ? "text-black"
-                            : "text-black/45 group-hover:text-black/90"
-                          : isActive
-                            ? "text-white"
-                            : "text-white/45 group-hover:text-white/90"
-                      }`}
+                  const isActive =
+                    activeSection === sectionId;
+
+                  return (
+                    <button
+                      key={item.href}
+                      type="button"
+                      onClick={() =>
+                        handleNavClick(item.href)
+                      }
+                      className="group relative rounded-full px-3.5 py-2 lg:px-4"
                     >
-                      {getNavLabel(item.label)}
-                    </span>
+                      {isActive && (
+                        <motion.span
+                          layoutId="desktop-active-nav"
+                          className={`absolute inset-0 rounded-full ${
+                            isLight
+                              ? "bg-black/[0.055]"
+                              : "bg-white/[0.055]"
+                          }`}
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 32,
+                          }}
+                        />
+                      )}
 
-                    {isActive && (
-                      <motion.span
-                        layoutId="active-nav"
-                        className="absolute inset-x-2 bottom-0 h-px bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400"
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
+                      <span
+                        className={`relative z-10 text-[12px] font-medium tracking-[-0.01em] transition-colors duration-300 ${
+                          isActive
+                            ? isLight
+                              ? "text-black"
+                              : "text-white"
+                            : `${mutedText} group-hover:${
+                                isLight
+                                  ? "text-black/85"
+                                  : "text-white/90"
+                              }`
+                        }`}
+                      >
+                        {getNavLabel(item.label)}
+                      </span>
 
-                    <span
-                      className={`absolute inset-0 -z-0 scale-75 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 ${
-                        isLight
-                          ? "bg-black/[0.035]"
-                          : "bg-white/[0.025]"
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
+                      {isActive && (
+                        <motion.span
+                          layoutId="desktop-active-dot"
+                          className="absolute bottom-1 left-1/2 h-0.5 w-0.5 -translate-x-1/2 rounded-full bg-cyan-400"
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 32,
+                          }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
 
             {/* =================================
-                Right Side
+                Desktop Right Actions
             ================================== */}
 
             <div className="hidden items-center gap-2 md:flex">
-              {/* Theme Toggle */}
+              {/* Language */}
+
+              <div
+                className="relative"
+                data-language-menu
+              >
+                <motion.button
+                  type="button"
+                  onClick={() =>
+                    setIsLanguageOpen((prev) => !prev)
+                  }
+                  whileTap={{ scale: 0.96 }}
+                  className={`group flex h-10 items-center gap-2 rounded-full border px-3.5 transition-all duration-300 ${
+                    isLight
+                      ? isLanguageOpen
+                        ? "border-black/15 bg-black/[0.06]"
+                        : "border-black/[0.08] bg-black/[0.025] hover:border-black/15 hover:bg-black/[0.045]"
+                      : isLanguageOpen
+                        ? "border-white/15 bg-white/[0.07]"
+                        : "border-white/[0.08] bg-white/[0.025] hover:border-white/15 hover:bg-white/[0.045]"
+                  }`}
+                  aria-label="Change language"
+                  aria-expanded={isLanguageOpen}
+                >
+                  <Globe
+                    size={14}
+                    strokeWidth={1.7}
+                    className={
+                      isLight
+                        ? "text-black/45 group-hover:text-cyan-500"
+                        : "text-white/45 group-hover:text-cyan-300"
+                    }
+                  />
+
+                  <span
+                    className={`text-[10px] font-semibold tracking-[0.14em] ${
+                      isLight
+                        ? "text-black/60"
+                        : "text-white/65"
+                    }`}
+                  >
+                    {language}
+                  </span>
+
+                  <ChevronDown
+                    size={12}
+                    strokeWidth={1.7}
+                    className={`transition-transform duration-300 ${
+                      isLight
+                        ? "text-black/30"
+                        : "text-white/30"
+                    } ${
+                      isLanguageOpen
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </motion.button>
+
+                <AnimatePresence>
+                  {isLanguageOpen && (
+                    <motion.div
+                      initial={{
+                        opacity: 0,
+                        y: -8,
+                        scale: 0.95,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: -8,
+                        scale: 0.95,
+                      }}
+                      transition={{
+                        duration: 0.2,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className={`absolute right-0 top-[calc(100%+9px)] w-36 overflow-hidden rounded-2xl border p-1.5 shadow-2xl backdrop-blur-2xl ${
+                        isLight
+                          ? "border-black/10 bg-white/95"
+                          : "border-white/10 bg-[#0a0a0a]/95"
+                      }`}
+                    >
+                      {languages.map((item) => {
+                        const isSelected =
+                          language === item.code;
+
+                        return (
+                          <button
+                            key={item.code}
+                            type="button"
+                            onClick={() =>
+                              handleLanguageChange(
+                                item.code,
+                              )
+                            }
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left transition-all duration-200 ${
+                              isLight
+                                ? isSelected
+                                  ? "bg-black/[0.065] text-black"
+                                  : "text-black/45 hover:bg-black/[0.035] hover:text-black"
+                                : isSelected
+                                  ? "bg-white/[0.07] text-white"
+                                  : "text-white/45 hover:bg-white/[0.04] hover:text-white"
+                            }`}
+                          >
+                            <span className="text-xs font-medium">
+                              {item.label}
+                            </span>
+
+                            <span
+                              className={`text-[9px] font-semibold tracking-[0.16em] ${
+                                isLight
+                                  ? "text-black/25"
+                                  : "text-white/25"
+                              }`}
+                            >
+                              {item.code}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Theme */}
 
               <motion.button
                 type="button"
                 onClick={toggleTheme}
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.94 }}
-                className={`group flex h-10 w-10 items-center justify-center border transition-all duration-300 ${
+                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 ${
                   isLight
-                    ? "border-black/10 bg-black/[0.025] text-black/60 hover:border-black/15 hover:bg-black/[0.05] hover:text-black"
-                    : "border-white/10 bg-white/[0.025] text-white/60 hover:border-white/15 hover:bg-white/[0.05] hover:text-white"
+                    ? "border-black/[0.08] bg-black/[0.025] text-black/55 hover:border-black/15 hover:bg-black/[0.05] hover:text-black"
+                    : "border-white/[0.08] bg-white/[0.025] text-white/55 hover:border-white/15 hover:bg-white/[0.05] hover:text-white"
                 }`}
                 aria-label={
                   isLight
@@ -375,14 +570,17 @@ const Navbar = () => {
                     : "Switch to light mode"
                 }
               >
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence
+                  mode="wait"
+                  initial={false}
+                >
                   {isLight ? (
                     <motion.span
                       key="sun"
                       initial={{
                         opacity: 0,
-                        rotate: -90,
-                        scale: 0.7,
+                        rotate: -80,
+                        scale: 0.65,
                       }}
                       animate={{
                         opacity: 1,
@@ -391,15 +589,17 @@ const Navbar = () => {
                       }}
                       exit={{
                         opacity: 0,
-                        rotate: 90,
-                        scale: 0.7,
+                        rotate: 80,
+                        scale: 0.65,
                       }}
-                      transition={{ duration: 0.2 }}
+                      transition={{
+                        duration: 0.22,
+                      }}
                     >
                       <Sun
-                        size={16}
+                        size={15}
                         strokeWidth={1.7}
-                        className="transition-colors duration-300 group-hover:text-cyan-500"
+                        className="hover:text-cyan-500"
                       />
                     </motion.span>
                   ) : (
@@ -407,8 +607,8 @@ const Navbar = () => {
                       key="moon"
                       initial={{
                         opacity: 0,
-                        rotate: 90,
-                        scale: 0.7,
+                        rotate: 80,
+                        scale: 0.65,
                       }}
                       animate={{
                         opacity: 1,
@@ -417,160 +617,52 @@ const Navbar = () => {
                       }}
                       exit={{
                         opacity: 0,
-                        rotate: -90,
-                        scale: 0.7,
+                        rotate: -80,
+                        scale: 0.65,
                       }}
-                      transition={{ duration: 0.2 }}
+                      transition={{
+                        duration: 0.22,
+                      }}
                     >
                       <Moon
-                        size={16}
+                        size={15}
                         strokeWidth={1.7}
-                        className="transition-colors duration-300 group-hover:text-cyan-300"
+                        className="hover:text-cyan-300"
                       />
                     </motion.span>
                   )}
                 </AnimatePresence>
               </motion.button>
 
-              {/* Language Selector */}
-
-              <div className="relative">
-                <motion.button
-                  type="button"
-                  onClick={() =>
-                    setIsLanguageOpen((prev) => !prev)
-                  }
-                  whileTap={{ scale: 0.97 }}
-                  className={`group flex items-center gap-2 border px-3 py-2 transition-all duration-300 ${
-                    isLight
-                      ? isLanguageOpen
-                        ? "border-black/15 bg-black/[0.06]"
-                        : "border-black/10 bg-black/[0.02] hover:border-black/15 hover:bg-black/[0.04]"
-                      : isLanguageOpen
-                        ? "border-white/15 bg-white/[0.06]"
-                        : "border-white/8 bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]"
-                  }`}
-                  aria-label="Change language"
-                  aria-expanded={isLanguageOpen}
-                >
-                  <Globe
-                    size={15}
-                    strokeWidth={1.6}
-                    className={`transition-colors duration-300 ${
-                      isLight
-                        ? "text-black/45 group-hover:text-cyan-500"
-                        : "text-white/45 group-hover:text-cyan-300"
-                    }`}
-                  />
-
-                  <span
-                    className={`text-[11px] font-semibold tracking-[0.12em] ${
-                      isLight ? "text-black/60" : "text-white/60"
-                    }`}
-                  >
-                    {language}
-                  </span>
-
-                  <ChevronDown
-                    size={13}
-                    strokeWidth={1.6}
-                    className={`transition-transform duration-300 ${
-                      isLight ? "text-black/30" : "text-white/30"
-                    } ${
-                      isLanguageOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </motion.button>
-
-                <AnimatePresence>
-                  {isLanguageOpen && (
-                    <motion.div
-                      initial={{
-                        opacity: 0,
-                        y: -6,
-                        scale: 0.96,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        y: -6,
-                        scale: 0.96,
-                      }}
-                      transition={{
-                        duration: 0.18,
-                      }}
-                      className={`absolute right-0 top-[calc(100%+8px)] w-32 overflow-hidden border p-1.5 shadow-2xl backdrop-blur-2xl ${
-                        isLight
-                          ? "border-black/10 bg-white/95"
-                          : "border-white/10 bg-[#0b0b0b]/95"
-                      }`}
-                    >
-                      {languages.map((item) => {
-                        const isSelected =
-                          language === item.code;
-
-                        return (
-                          <button
-                            key={item.code}
-                            type="button"
-                            onClick={() =>
-                              handleLanguageChange(item.code)
-                            }
-                            className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-all duration-200 ${
-                              isLight
-                                ? isSelected
-                                  ? "bg-black/[0.07] text-black"
-                                  : "text-black/45 hover:bg-black/[0.04] hover:text-black"
-                                : isSelected
-                                  ? "bg-white/[0.07] text-white"
-                                  : "text-white/45 hover:bg-white/[0.04] hover:text-white"
-                            }`}
-                          >
-                            <span className="text-xs">
-                              {item.label}
-                            </span>
-
-                            <span
-                              className={`text-[9px] font-semibold tracking-widest ${
-                                isLight
-                                  ? "text-black/25"
-                                  : "text-white/25"
-                              }`}
-                            >
-                              {item.code}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
               {/* Let's Talk */}
 
               <motion.button
                 type="button"
-                onClick={() => handleNavClick("#contact")}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                className={`group ml-2 flex items-center gap-2 border px-4 py-2.5 text-xs font-semibold transition-all duration-300 ${
+                onClick={() =>
+                  handleNavClick("#contact")
+                }
+                whileHover={{
+                  y: -1,
+                  scale: 1.01,
+                }}
+                whileTap={{
+                  scale: 0.98,
+                }}
+                className={`group ml-1 flex h-10 items-center gap-2 rounded-full border px-4 text-[11px] font-semibold transition-all duration-300 ${
                   isLight
-                    ? "border-black/15 bg-black text-white hover:bg-black/90"
-                    : "border-white/15 bg-white text-black hover:bg-white/90"
+                    ? "border-black bg-black text-white hover:bg-black/90"
+                    : "border-white bg-white text-black hover:bg-white/90"
                 }`}
               >
                 <span>
-                  {language === "BN" ? "কথা বলুন" : "Let's Talk"}
+                  {language === "BN"
+                    ? "কথা বলুন"
+                    : "Let's Talk"}
                 </span>
 
                 <ArrowUpRight
-                  size={14}
-                  strokeWidth={1.8}
+                  size={13}
+                  strokeWidth={1.9}
                   className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </motion.button>
@@ -580,103 +672,54 @@ const Navbar = () => {
                 Mobile Actions
             ================================== */}
 
-            <div className="flex items-center gap-2 md:hidden">
-              {/* Mobile Theme */}
-
-              <motion.button
-                type="button"
-                onClick={toggleTheme}
-                whileTap={{ scale: 0.94 }}
-                className={`flex h-10 w-10 items-center justify-center border transition-all duration-300 ${
-                  isLight
-                    ? "border-black/10 bg-black/[0.025] text-black/60 hover:border-black/15 hover:text-black"
-                    : "border-white/10 bg-white/[0.025] text-white/60 hover:border-white/15 hover:text-white"
-                }`}
-                aria-label={
-                  isLight
-                    ? "Switch to dark mode"
-                    : "Switch to light mode"
-                }
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isLight ? (
-                    <motion.span
-                      key="mobile-sun"
-                      initial={{
-                        opacity: 0,
-                        rotate: -90,
-                        scale: 0.7,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        rotate: 0,
-                        scale: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        rotate: 90,
-                        scale: 0.7,
-                      }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Sun size={17} strokeWidth={1.7} />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="mobile-moon"
-                      initial={{
-                        opacity: 0,
-                        rotate: 90,
-                        scale: 0.7,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        rotate: 0,
-                        scale: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        rotate: -90,
-                        scale: 0.7,
-                      }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Moon size={17} strokeWidth={1.7} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-
+            <div className="flex items-center gap-1.5 md:hidden">
               {/* Mobile Language */}
 
-              <div className="relative">
-                <button
+              <div
+                className="relative"
+                data-language-menu
+              >
+                <motion.button
                   type="button"
                   onClick={() =>
                     setIsLanguageOpen((prev) => !prev)
                   }
-                  className={`flex h-10 items-center gap-1.5 border px-2.5 transition-colors duration-300 ${
+                  whileTap={{ scale: 0.95 }}
+                  className={`flex h-10 items-center gap-1.5 rounded-full border px-3 transition-all duration-300 ${
                     isLight
-                      ? "border-black/10 bg-black/[0.025] text-black/60 hover:border-black/15 hover:text-black"
-                      : "border-white/10 bg-white/[0.025] text-white/60 hover:border-white/15 hover:text-white"
+                      ? "border-black/[0.08] bg-black/[0.025] text-black/60"
+                      : "border-white/[0.08] bg-white/[0.025] text-white/60"
                   }`}
                   aria-label="Change language"
                   aria-expanded={isLanguageOpen}
                 >
-                  <Globe size={15} strokeWidth={1.6} />
+                  <Globe
+                    size={14}
+                    strokeWidth={1.7}
+                  />
 
-                  <span className="text-[10px] font-semibold tracking-wider">
+                  <span className="text-[10px] font-semibold tracking-[0.12em]">
                     {language}
                   </span>
-                </button>
+
+                  <ChevronDown
+                    size={11}
+                    strokeWidth={1.7}
+                    className={`transition-transform duration-300 ${
+                      isLanguageOpen
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </motion.button>
 
                 <AnimatePresence>
                   {isLanguageOpen && (
                     <motion.div
                       initial={{
                         opacity: 0,
-                        y: -6,
-                        scale: 0.96,
+                        y: -8,
+                        scale: 0.95,
                       }}
                       animate={{
                         opacity: 1,
@@ -685,16 +728,16 @@ const Navbar = () => {
                       }}
                       exit={{
                         opacity: 0,
-                        y: -6,
-                        scale: 0.96,
+                        y: -8,
+                        scale: 0.95,
                       }}
                       transition={{
-                        duration: 0.18,
+                        duration: 0.2,
                       }}
-                      className={`absolute right-0 top-[calc(100%+8px)] w-32 overflow-hidden border p-1.5 shadow-2xl backdrop-blur-2xl ${
+                      className={`absolute right-0 top-[calc(100%+8px)] w-32 overflow-hidden rounded-2xl border p-1.5 shadow-2xl backdrop-blur-2xl ${
                         isLight
                           ? "border-black/10 bg-white/95"
-                          : "border-white/10 bg-[#0b0b0b]/95"
+                          : "border-white/10 bg-[#0a0a0a]/95"
                       }`}
                     >
                       {languages.map((item) => {
@@ -706,29 +749,25 @@ const Navbar = () => {
                             key={item.code}
                             type="button"
                             onClick={() =>
-                              handleLanguageChange(item.code)
+                              handleLanguageChange(
+                                item.code,
+                              )
                             }
-                            className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-all duration-200 ${
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left transition-all duration-200 ${
                               isLight
                                 ? isSelected
-                                  ? "bg-black/[0.07] text-black"
-                                  : "text-black/45 hover:bg-black/[0.04] hover:text-black"
+                                  ? "bg-black/[0.065] text-black"
+                                  : "text-black/45 hover:bg-black/[0.035] hover:text-black"
                                 : isSelected
                                   ? "bg-white/[0.07] text-white"
                                   : "text-white/45 hover:bg-white/[0.04] hover:text-white"
                             }`}
                           >
-                            <span className="text-xs">
+                            <span className="text-xs font-medium">
                               {item.label}
                             </span>
 
-                            <span
-                              className={`text-[9px] font-semibold tracking-widest ${
-                                isLight
-                                  ? "text-black/25"
-                                  : "text-white/25"
-                              }`}
-                            >
+                            <span className="text-[9px] font-semibold tracking-[0.15em] opacity-30">
                               {item.code}
                             </span>
                           </button>
@@ -739,7 +778,86 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* Mobile Theme */}
+
+              <motion.button
+                type="button"
+                onClick={toggleTheme}
+                whileTap={{ scale: 0.94 }}
+                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 ${
+                  isLight
+                    ? "border-black/[0.08] bg-black/[0.025] text-black/55"
+                    : "border-white/[0.08] bg-white/[0.025] text-white/55"
+                }`}
+                aria-label={
+                  isLight
+                    ? "Switch to dark mode"
+                    : "Switch to light mode"
+                }
+              >
+                <AnimatePresence
+                  mode="wait"
+                  initial={false}
+                >
+                  {isLight ? (
+                    <motion.span
+                      key="mobile-sun"
+                      initial={{
+                        opacity: 0,
+                        rotate: -80,
+                        scale: 0.65,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        rotate: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        rotate: 80,
+                        scale: 0.65,
+                      }}
+                      transition={{
+                        duration: 0.22,
+                      }}
+                    >
+                      <Sun
+                        size={16}
+                        strokeWidth={1.7}
+                      />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="mobile-moon"
+                      initial={{
+                        opacity: 0,
+                        rotate: 80,
+                        scale: 0.65,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        rotate: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        rotate: -80,
+                        scale: 0.65,
+                      }}
+                      transition={{
+                        duration: 0.22,
+                      }}
+                    >
+                      <Moon
+                        size={16}
+                        strokeWidth={1.7}
+                      />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+
+              {/* Mobile Menu */}
 
               <motion.button
                 type="button"
@@ -748,19 +866,24 @@ const Navbar = () => {
                   setIsOpen((prev) => !prev);
                 }}
                 whileTap={{ scale: 0.94 }}
-                className={`flex h-10 w-10 items-center justify-center border transition-all duration-300 ${
+                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 ${
                   isLight
                     ? isOpen
-                      ? "border-black/20 bg-black/[0.07]"
-                      : "border-black/10 bg-black/[0.025]"
+                      ? "border-black/15 bg-black/[0.07]"
+                      : "border-black/[0.08] bg-black/[0.025]"
                     : isOpen
-                      ? "border-white/20 bg-white/[0.07]"
-                      : "border-white/10 bg-white/[0.025]"
+                      ? "border-white/15 bg-white/[0.07]"
+                      : "border-white/[0.08] bg-white/[0.025]"
                 }`}
-                aria-label={isOpen ? "Close menu" : "Open menu"}
+                aria-label={
+                  isOpen ? "Close menu" : "Open menu"
+                }
                 aria-expanded={isOpen}
               >
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence
+                  mode="wait"
+                  initial={false}
+                >
                   {isOpen ? (
                     <motion.span
                       key="close"
@@ -779,9 +902,14 @@ const Navbar = () => {
                         rotate: 45,
                         scale: 0.7,
                       }}
-                      transition={{ duration: 0.18 }}
+                      transition={{
+                        duration: 0.18,
+                      }}
                     >
-                      <X size={19} strokeWidth={1.7} />
+                      <X
+                        size={18}
+                        strokeWidth={1.7}
+                      />
                     </motion.span>
                   ) : (
                     <motion.span
@@ -801,9 +929,14 @@ const Navbar = () => {
                         rotate: -45,
                         scale: 0.7,
                       }}
-                      transition={{ duration: 0.18 }}
+                      transition={{
+                        duration: 0.18,
+                      }}
                     >
-                      <Menu size={19} strokeWidth={1.7} />
+                      <Menu
+                        size={18}
+                        strokeWidth={1.7}
+                      />
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -831,16 +964,16 @@ const Navbar = () => {
                   height: 0,
                 }}
                 transition={{
-                  duration: 0.3,
+                  duration: 0.32,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 className="overflow-hidden md:hidden"
               >
                 <div
-                  className={`border-t pt-4 ${
+                  className={`mx-3 mb-3 border-t pt-3 sm:mx-4 ${
                     isLight
-                      ? "border-black/8"
-                      : "border-white/8"
+                      ? "border-black/[0.07]"
+                      : "border-white/[0.07]"
                   }`}
                 >
                   {/* Mobile Navigation */}
@@ -859,37 +992,46 @@ const Navbar = () => {
                           type="button"
                           initial={{
                             opacity: 0,
-                            x: -12,
+                            x: -14,
                           }}
                           animate={{
                             opacity: 1,
                             x: 0,
                           }}
                           transition={{
-                            duration: 0.25,
-                            delay: index * 0.04,
+                            duration: 0.3,
+                            delay: index * 0.045,
+                            ease: [0.22, 1, 0.36, 1],
                           }}
                           onClick={() =>
                             handleNavClick(item.href)
                           }
-                          className={`group flex w-full items-center justify-between border px-4 py-3.5 text-left transition-all duration-300 ${
+                          className={`group flex w-full items-center justify-between rounded-xl border px-4 py-3.5 text-left transition-all duration-300 ${
                             isLight
                               ? isActive
                                 ? "border-black/10 bg-black/[0.045]"
-                                : "border-transparent hover:border-black/5 hover:bg-black/[0.025]"
+                                : "border-transparent hover:bg-black/[0.025]"
                               : isActive
                                 ? "border-white/10 bg-white/[0.045]"
-                                : "border-transparent hover:border-white/5 hover:bg-white/[0.025]"
+                                : "border-transparent hover:bg-white/[0.025]"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <span
-                              className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                            <motion.span
+                              animate={{
+                                scale: isActive
+                                  ? 1
+                                  : 0.75,
+                                opacity: isActive
+                                  ? 1
+                                  : 0.45,
+                              }}
+                              className={`h-1.5 w-1.5 rounded-full ${
                                 isActive
-                                  ? "bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.6)]"
+                                  ? "bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.65)]"
                                   : isLight
-                                    ? "bg-black/15 group-hover:bg-black/40"
-                                    : "bg-white/15 group-hover:bg-white/40"
+                                    ? "bg-black/20"
+                                    : "bg-white/20"
                               }`}
                             />
 
@@ -898,10 +1040,10 @@ const Navbar = () => {
                                 isLight
                                   ? isActive
                                     ? "text-black"
-                                    : "text-black/50 group-hover:text-black"
+                                    : "text-black/50 group-hover:text-black/85"
                                   : isActive
                                     ? "text-white"
-                                    : "text-white/50 group-hover:text-white"
+                                    : "text-white/50 group-hover:text-white/85"
                               }`}
                             >
                               {getNavLabel(item.label)}
@@ -913,10 +1055,10 @@ const Navbar = () => {
                             strokeWidth={1.5}
                             className={`transition-all duration-300 ${
                               isActive
-                                ? "text-cyan-500"
+                                ? "text-cyan-400"
                                 : isLight
-                                  ? "text-black/15 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-black/50"
-                                  : "text-white/15 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/50"
+                                  ? "text-black/15 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-black/45"
+                                  : "text-white/15 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/45"
                             }`}
                           />
                         </motion.button>
@@ -937,16 +1079,16 @@ const Navbar = () => {
                       y: 0,
                     }}
                     transition={{
-                      duration: 0.3,
-                      delay: 0.2,
+                      duration: 0.35,
+                      delay: 0.25,
                     }}
                     onClick={() =>
                       handleNavClick("#contact")
                     }
-                    className={`group mt-4 flex w-full items-center justify-center gap-2 border px-5 py-3.5 text-sm font-semibold transition-all duration-300 ${
+                    className={`group mt-3 flex w-full items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-semibold transition-all duration-300 ${
                       isLight
-                        ? "border-black/15 bg-black text-white hover:bg-black/90"
-                        : "border-white/15 bg-white text-black hover:bg-white/90"
+                        ? "border-black bg-black text-white hover:bg-black/90"
+                        : "border-white bg-white text-black hover:bg-white/90"
                     }`}
                   >
                     <span>
@@ -956,23 +1098,33 @@ const Navbar = () => {
                     </span>
 
                     <ArrowUpRight
-                      size={16}
+                      size={15}
                       strokeWidth={1.8}
                       className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     />
                   </motion.button>
 
-                  {/* Mobile Menu Footer */}
+                  {/* Mobile Footer */}
 
-                  <div
-                    className={`mt-5 flex items-center justify-between border-t pt-4 ${
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.32,
+                    }}
+                    className={`mt-4 flex items-center justify-between border-t px-1 pt-4 ${
                       isLight
-                        ? "border-black/5"
-                        : "border-white/5"
+                        ? "border-black/[0.05]"
+                        : "border-white/[0.05]"
                     }`}
                   >
                     <span
-                      className={`text-[10px] uppercase tracking-[0.18em] ${
+                      className={`text-[9px] uppercase tracking-[0.2em] ${
                         isLight
                           ? "text-black/20"
                           : "text-white/20"
@@ -982,7 +1134,7 @@ const Navbar = () => {
                     </span>
 
                     <span
-                      className={`text-[10px] ${
+                      className={`text-[9px] ${
                         isLight
                           ? "text-black/20"
                           : "text-white/20"
@@ -990,7 +1142,7 @@ const Navbar = () => {
                     >
                       MERN Stack Developer
                     </span>
-                  </div>
+                  </motion.div>
                 </div>
               </motion.div>
             )}
