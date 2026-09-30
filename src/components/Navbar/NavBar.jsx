@@ -74,7 +74,8 @@ const Navbar = () => {
 
         if (!section) continue;
 
-        const sectionTop = section.offsetTop;
+        const sectionTop =
+          section.getBoundingClientRect().top + window.scrollY;
 
         if (scrollPosition >= sectionTop) {
           currentSection = id;
@@ -90,8 +91,11 @@ const Navbar = () => {
       passive: true,
     });
 
+    window.addEventListener("resize", handleActiveSection);
+
     return () => {
       window.removeEventListener("scroll", handleActiveSection);
+      window.removeEventListener("resize", handleActiveSection);
     };
   }, []);
 
@@ -116,20 +120,69 @@ const Navbar = () => {
   ====================================== */
 
   const handleNavClick = (href) => {
+    const sectionId = href.replace("#", "");
+
+    // Close mobile menu
     setIsOpen(false);
 
-    const sectionId = href.replace("#", "");
+    // Close language dropdown
+    setIsLanguageOpen(false);
+
+    // Update active section immediately
     setActiveSection(sectionId);
 
-    const section = document.getElementById(sectionId);
+    // Immediately unlock body scroll.
+    // This is important for mobile devices.
+    document.body.style.overflow = "";
 
-    if (section) {
-      section.scrollIntoView({
+    const scrollToSection = () => {
+      const section = document.getElementById(sectionId);
+
+      if (!section) return;
+
+      /*
+        Calculate navbar height dynamically.
+        This prevents the section from going underneath
+        the fixed navbar on mobile/tablet/desktop.
+      */
+      const navbar = document.querySelector("header");
+
+      const navbarHeight = navbar
+        ? navbar.getBoundingClientRect().height
+        : 90;
+
+      const extraSpacing = 16;
+
+      const sectionPosition =
+        section.getBoundingClientRect().top +
+        window.scrollY -
+        navbarHeight -
+        extraSpacing;
+
+      window.scrollTo({
+        top: Math.max(0, sectionPosition),
         behavior: "smooth",
-        block: "start",
+      });
+    };
+
+    /*
+      Wait for the mobile menu closing animation/state update
+      before calculating the section position.
+    */
+    if (window.innerWidth < 768) {
+      setTimeout(() => {
+        scrollToSection();
+      }, 320);
+    } else {
+      requestAnimationFrame(() => {
+        scrollToSection();
       });
     }
 
+    /*
+      Update hash without triggering browser's
+      default jump behavior.
+    */
     window.history.replaceState(null, "", href);
   };
 
@@ -270,8 +323,6 @@ const Navbar = () => {
                       {getNavLabel(item.label)}
                     </span>
 
-                    {/* Active Indicator */}
-
                     {isActive && (
                       <motion.span
                         layoutId="active-nav"
@@ -283,8 +334,6 @@ const Navbar = () => {
                         }}
                       />
                     )}
-
-                    {/* Hover Background */}
 
                     <span
                       className={`absolute inset-0 -z-0 scale-75 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 ${
@@ -694,7 +743,10 @@ const Navbar = () => {
 
               <motion.button
                 type="button"
-                onClick={() => setIsOpen((prev) => !prev)}
+                onClick={() => {
+                  setIsLanguageOpen(false);
+                  setIsOpen((prev) => !prev);
+                }}
                 whileTap={{ scale: 0.94 }}
                 className={`flex h-10 w-10 items-center justify-center border transition-all duration-300 ${
                   isLight
