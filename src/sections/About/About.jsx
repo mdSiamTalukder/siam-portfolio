@@ -7,6 +7,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
 import translations from "../../data/translations";
 
 const cardDirections = [
@@ -49,12 +50,10 @@ const paragraphReveal = {
 
 export default function About() {
   const { language } = useLanguage();
+  const { theme } = useTheme();
 
-  /*
-   * LanguageContext uses:
-   * "EN" → English
-   * "BN" → Bangla
-   */
+  const isLight = theme === "light";
+
   const content = translations[language]?.about || translations.EN.about;
 
   const cards = [
@@ -87,26 +86,51 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden border-t border-white/5 bg-[#050505] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-32"
+      className={`relative overflow-hidden border-t px-4 py-20 transition-colors duration-500 sm:px-6 sm:py-24 lg:px-8 lg:py-32 ${
+        isLight
+          ? "border-gray-200 bg-[#f8fafc]"
+          : "border-white/5 bg-[#050505]"
+      }`}
     >
-      {/* Ambient Background */}
+      {/* =====================================================
+          Ambient Background
+      ====================================================== */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[-180px] top-[15%] h-[360px] w-[360px] rounded-full bg-cyan-500/5 blur-[120px]" />
-
-        <div className="absolute bottom-[5%] right-[-180px] h-[400px] w-[400px] rounded-full bg-violet-500/5 blur-[130px]" />
-
+        {/* Cyan Glow */}
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className={`absolute left-[-180px] top-[15%] h-[360px] w-[360px] rounded-full blur-[120px] ${
+            isLight ? "bg-cyan-400/10" : "bg-cyan-500/5"
+          }`}
+        />
+
+        {/* Violet Glow */}
+        <div
+          className={`absolute bottom-[5%] right-[-180px] h-[400px] w-[400px] rounded-full blur-[130px] ${
+            isLight ? "bg-violet-400/10" : "bg-violet-500/5"
+          }`}
+        />
+
+        {/* Grid */}
+        <div
+          className={`absolute inset-0 ${
+            isLight ? "opacity-[0.045]" : "opacity-[0.025]"
+          }`}
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)",
+            backgroundImage: isLight
+              ? "linear-gradient(rgba(15,23,42,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.35) 1px, transparent 1px)"
+              : "linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)",
             backgroundSize: "50px 50px",
           }}
         />
       </div>
 
+      {/* =====================================================
+          Main Container
+      ====================================================== */}
       <div className="relative mx-auto max-w-7xl">
-        {/* Section Header */}
+        {/* =====================================================
+            Section Header
+        ====================================================== */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -121,9 +145,17 @@ export default function About() {
             variants={textReveal}
             className="mb-5 flex items-center gap-3 sm:mb-6"
           >
-            <span className="h-px w-8 bg-cyan-400 sm:w-12" />
+            <span
+              className={`h-px w-8 sm:w-12 ${
+                isLight ? "bg-cyan-600" : "bg-cyan-400"
+              }`}
+            />
 
-            <span className="text-xs font-medium uppercase tracking-[0.25em] text-cyan-400 sm:text-sm">
+            <span
+              className={`text-xs font-semibold uppercase tracking-[0.25em] sm:text-sm ${
+                isLight ? "text-cyan-700" : "text-cyan-400"
+              }`}
+            >
               {content.badge}
             </span>
           </motion.div>
@@ -131,12 +163,20 @@ export default function About() {
           {/* Heading */}
           <motion.h2
             variants={textReveal}
-            className="max-w-4xl text-[clamp(2.2rem,5vw,5rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-white"
+            className={`max-w-4xl text-[clamp(2.2rem,5vw,5rem)] font-semibold leading-[1.05] tracking-[-0.04em] ${
+              isLight ? "text-gray-950" : "text-white"
+            }`}
           >
             {language === "BN" ? (
               <>
                 আইডিয়াকে{" "}
-                <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                <span
+                  className={`bg-gradient-to-r bg-clip-text text-transparent ${
+                    isLight
+                      ? "from-cyan-600 via-cyan-700 to-violet-700"
+                      : "from-cyan-300 via-cyan-400 to-violet-400"
+                  }`}
+                >
                   ডিজিটাল অভিজ্ঞতায়
                 </span>{" "}
                 রূপ দিই।
@@ -144,7 +184,13 @@ export default function About() {
             ) : (
               <>
                 Turning ideas into{" "}
-                <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                <span
+                  className={`bg-gradient-to-r bg-clip-text text-transparent ${
+                    isLight
+                      ? "from-cyan-600 via-cyan-700 to-violet-700"
+                      : "from-cyan-300 via-cyan-400 to-violet-400"
+                  }`}
+                >
                   digital experiences.
                 </span>
               </>
@@ -152,9 +198,13 @@ export default function About() {
           </motion.h2>
         </motion.div>
 
-        {/* Content */}
+        {/* =====================================================
+            Content
+        ====================================================== */}
         <div className="mt-10 grid gap-12 lg:mt-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-20">
-          {/* Left Text */}
+          {/* =================================================
+              Left Text
+          ================================================== */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -164,32 +214,43 @@ export default function About() {
             }}
             className="max-w-2xl"
           >
+            {/* Intro */}
             <motion.p
               custom={0}
               variants={paragraphReveal}
-              className="text-base leading-8 text-white/75 sm:text-lg sm:leading-9"
+              className={`text-base leading-8 sm:text-lg sm:leading-9 ${
+                isLight ? "text-gray-700" : "text-white/75"
+              }`}
             >
               {content.intro}
             </motion.p>
 
+            {/* Passion */}
             <motion.p
               custom={1}
               variants={paragraphReveal}
-              className="mt-6 text-base leading-8 text-white/55 sm:text-lg sm:leading-9"
+              className={`mt-6 text-base leading-8 sm:text-lg sm:leading-9 ${
+                isLight ? "text-gray-600" : "text-white/55"
+              }`}
             >
               {content.passion}
             </motion.p>
 
+            {/* Goal */}
             <motion.p
               custom={2}
               variants={paragraphReveal}
-              className="mt-6 text-base leading-8 text-white/55 sm:text-lg sm:leading-9"
+              className={`mt-6 text-base leading-8 sm:text-lg sm:leading-9 ${
+                isLight ? "text-gray-600" : "text-white/55"
+              }`}
             >
               {content.goal}
             </motion.p>
           </motion.div>
 
-          {/* Right Cards */}
+          {/* =================================================
+              Right Cards
+          ================================================== */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
             {cards.map((card, index) => {
               const Icon = card.icon;
@@ -224,7 +285,9 @@ export default function About() {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                 >
-                  {/* Floating Card */}
+                  {/* =========================================
+                      Floating Card
+                  ========================================== */}
                   <motion.a
                     href={card.href}
                     animate={{
@@ -245,37 +308,75 @@ export default function About() {
                         ease: "easeOut",
                       },
                     }}
-                    className="group relative block h-full min-h-[210px] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-5 backdrop-blur-xl transition-colors duration-300 hover:border-cyan-400/30 hover:bg-white/[0.055] sm:min-h-[230px] sm:p-6"
+                    className={`group relative block h-full min-h-[210px] overflow-hidden rounded-2xl p-5 backdrop-blur-xl transition-all duration-300 sm:min-h-[230px] sm:p-6 ${
+                      isLight
+                        ? "border border-gray-200 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.08)] hover:border-cyan-400 hover:bg-white hover:shadow-[0_15px_45px_rgba(15,23,42,0.12)]"
+                        : "border border-white/10 bg-white/[0.035] hover:border-cyan-400/30 hover:bg-white/[0.055]"
+                    }`}
                   >
                     {/* Hover Glow */}
-                    <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full bg-cyan-400/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+                    <div
+                      className={`pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-100 ${
+                        isLight
+                          ? "bg-cyan-400/15 opacity-0"
+                          : "bg-cyan-400/10 opacity-0"
+                      }`}
+                    />
 
                     <div className="relative flex h-full flex-col">
-                      {/* Icon */}
+                      {/* =======================================
+                          Icon + Arrow
+                      ======================================== */}
                       <div className="mb-8 flex items-center justify-between">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:bg-cyan-400/15 group-hover:text-cyan-200">
-                          <Icon size={21} strokeWidth={1.7} />
+                        {/* Icon Box */}
+                        <div
+                          className={`flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                            isLight
+                              ? "border border-cyan-200 bg-cyan-50 text-cyan-700 group-hover:border-cyan-300 group-hover:bg-cyan-100 group-hover:text-cyan-800"
+                              : "border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 group-hover:border-cyan-400/40 group-hover:bg-cyan-400/15 group-hover:text-cyan-200"
+                          }`}
+                        >
+                          <Icon size={21} strokeWidth={1.8} />
                         </div>
 
+                        {/* Arrow */}
                         <ArrowUpRight
                           size={19}
-                          className="text-white/25 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-cyan-300"
+                          className={`transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 ${
+                            isLight
+                              ? "text-gray-400 group-hover:text-cyan-700"
+                              : "text-white/25 group-hover:text-cyan-300"
+                          }`}
                         />
                       </div>
 
-                      {/* Card Content */}
+                      {/* =======================================
+                          Card Content
+                      ======================================== */}
                       <div className="mt-auto">
-                        <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+                        <h3
+                          className={`text-xl font-semibold tracking-tight sm:text-2xl ${
+                            isLight ? "text-gray-950" : "text-white"
+                          }`}
+                        >
                           {card.title}
                         </h3>
 
-                        <p className="mt-3 max-w-xs text-sm leading-6 text-white/50 sm:text-[15px]">
+                        <p
+                          className={`mt-3 max-w-xs text-sm leading-6 sm:text-[15px] ${
+                            isLight ? "text-gray-600" : "text-white/50"
+                          }`}
+                        >
                           {card.description}
                         </p>
                       </div>
 
-                      {/* Bottom Line */}
-                      <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 group-hover:w-full" />
+                      {/* =======================================
+                          Bottom Line
+                      ======================================== */}
+                      <div
+                        className={`absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-500 to-violet-600 transition-all duration-500 group-hover:w-full`}
+                      />
                     </div>
                   </motion.a>
                 </motion.div>

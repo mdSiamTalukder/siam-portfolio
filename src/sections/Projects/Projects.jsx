@@ -7,6 +7,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
 import translations from "../../data/translations";
 
 const GITHUB_PROFILE = "https://github.com/mdSiamTalukder";
@@ -129,20 +130,52 @@ const contentReveal = {
 
 const Projects = () => {
   const { language } = useLanguage();
+  const { theme } = useTheme();
+
   const t = translations[language];
+  const isLight = theme === "light";
 
   return (
     <section
       id="projects"
-      className="relative overflow-hidden bg-[#050505] py-24 pb-32 sm:py-28 sm:pb-36 lg:py-32 lg:pb-40"
+      className={`relative overflow-hidden py-24 pb-32 transition-colors duration-500 sm:py-28 sm:pb-36 lg:py-32 lg:pb-40 ${
+        isLight ? "bg-[#f8fafc]" : "bg-[#050505]"
+      }`}
     >
-      {/* Background Glow */}
+      {/* =================================
+          Background Glow
+      ================================== */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-10%] top-[15%] h-72 w-72 rounded-full bg-cyan-500/5 blur-[120px]" />
+        <div
+          className={`absolute left-[-10%] top-[15%] h-72 w-72 rounded-full blur-[120px] ${
+            isLight ? "bg-cyan-400/10" : "bg-cyan-500/5"
+          }`}
+        />
 
-        <div className="absolute right-[-10%] top-[45%] h-80 w-80 rounded-full bg-violet-500/5 blur-[130px]" />
+        <div
+          className={`absolute right-[-10%] top-[45%] h-80 w-80 rounded-full blur-[130px] ${
+            isLight ? "bg-violet-400/10" : "bg-violet-500/5"
+          }`}
+        />
 
-        <div className="absolute bottom-[5%] left-[35%] h-64 w-64 rounded-full bg-pink-500/5 blur-[120px]" />
+        <div
+          className={`absolute bottom-[5%] left-[35%] h-64 w-64 rounded-full blur-[120px] ${
+            isLight ? "bg-pink-400/10" : "bg-pink-500/5"
+          }`}
+        />
+
+        {/* Subtle Grid */}
+        <div
+          className={`absolute inset-0 ${
+            isLight ? "opacity-[0.035]" : "opacity-[0.018]"
+          }`}
+          style={{
+            backgroundImage: isLight
+              ? "linear-gradient(rgba(15,23,42,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.35) 1px, transparent 1px)"
+              : "linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -188,7 +221,11 @@ const Projects = () => {
               duration: 0.55,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mb-5 inline-flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 backdrop-blur-sm"
+            className={`mb-5 inline-flex items-center gap-2 border px-3 py-2 backdrop-blur-sm ${
+              isLight
+                ? "border-gray-200 bg-white shadow-sm"
+                : "border-white/10 bg-white/[0.03]"
+            }`}
           >
             <motion.span
               initial={{
@@ -207,10 +244,16 @@ const Projects = () => {
                 duration: 0.4,
                 delay: 0.15,
               }}
-              className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500"
+              className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600"
             />
 
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-medium uppercase tracking-[0.2em] text-transparent">
+            <span
+              className={`bg-gradient-to-r bg-clip-text text-xs font-semibold uppercase tracking-[0.2em] text-transparent ${
+                isLight
+                  ? "from-cyan-600 via-blue-700 to-violet-700"
+                  : "from-cyan-300 via-blue-400 to-violet-400"
+              }`}
+            >
               {t.projects.badge}
             </span>
           </motion.div>
@@ -236,10 +279,22 @@ const Projects = () => {
             }}
             className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
           >
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span
+              className={`bg-gradient-to-r bg-clip-text text-transparent ${
+                isLight
+                  ? "from-cyan-600 via-blue-700 to-violet-700"
+                  : "from-cyan-300 via-blue-400 to-violet-400"
+              }`}
+            >
               {t.projects.titleStart}
             </span>{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span
+              className={`bg-gradient-to-r bg-clip-text text-transparent ${
+                isLight
+                  ? "from-violet-700 via-purple-700 to-pink-700"
+                  : "from-violet-400 via-purple-400 to-pink-400"
+              }`}
+            >
               {t.projects.titleEnd}
             </span>
           </motion.h2>
@@ -263,11 +318,11 @@ const Projects = () => {
               delay: 0.18,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-5 text-sm leading-7 sm:text-base sm:leading-8"
+            className={`mt-5 text-sm leading-7 sm:text-base sm:leading-8 ${
+              isLight ? "text-gray-600" : "text-white/55"
+            }`}
           >
-            <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-              {t.projects.description}
-            </span>
+            {t.projects.description}
           </motion.p>
         </motion.div>
 
@@ -300,7 +355,11 @@ const Projects = () => {
                 style={{
                   transformPerspective: 1000,
                 }}
-                className="group relative overflow-hidden border border-white/10 bg-white/[0.025] backdrop-blur-sm"
+                className={`group relative overflow-hidden backdrop-blur-sm transition-all duration-300 ${
+                  isLight
+                    ? "border border-gray-200 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.07)] hover:border-cyan-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.11)]"
+                    : "border border-white/10 bg-white/[0.025]"
+                }`}
               >
                 {/* =================================
                     Hover Glow
@@ -341,7 +400,7 @@ const Projects = () => {
                     delay: index * 0.18 + 0.15,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`h-px w-full bg-gradient-to-r ${project.gradient} opacity-60 transition-opacity duration-300 group-hover:opacity-100`}
+                  className={`h-px w-full bg-gradient-to-r ${project.gradient} opacity-70 transition-opacity duration-300 group-hover:opacity-100`}
                 />
 
                 <div className="relative p-6 sm:p-7 lg:p-8">
@@ -366,12 +425,16 @@ const Projects = () => {
                         {project.number}
                       </span>
 
-                      <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                      <h3
+                        className={`mt-3 text-2xl font-bold tracking-tight sm:text-3xl ${
+                          isLight ? "text-gray-950" : "text-white"
+                        }`}
+                      >
                         {projectTranslation.title}
                       </h3>
 
                       <p
-                        className={`mt-1 bg-gradient-to-r ${project.gradient} bg-clip-text text-sm font-medium text-transparent`}
+                        className={`mt-1 bg-gradient-to-r ${project.gradient} bg-clip-text text-sm font-semibold text-transparent`}
                       >
                         {projectTranslation.subtitle}
                       </p>
@@ -402,12 +465,18 @@ const Projects = () => {
                         rotate: 8,
                         scale: 1.08,
                       }}
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center border border-white/10 bg-gradient-to-br ${project.glow}`}
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center border bg-gradient-to-br ${project.glow} ${
+                        isLight ? "border-gray-200" : "border-white/10"
+                      }`}
                     >
                       <Code2
                         size={19}
                         strokeWidth={1.7}
-                        className="text-white/60 transition-colors duration-300 group-hover:text-white"
+                        className={`transition-colors duration-300 ${
+                          isLight
+                            ? "text-gray-600 group-hover:text-cyan-700"
+                            : "text-white/60 group-hover:text-white"
+                        }`}
                       />
                     </motion.div>
                   </motion.div>
@@ -424,7 +493,9 @@ const Projects = () => {
                       once: false,
                       amount: 0.15,
                     }}
-                    className="mt-6 text-sm leading-7 text-white/55 sm:text-[15px]"
+                    className={`mt-6 text-sm leading-7 sm:text-[15px] ${
+                      isLight ? "text-gray-600" : "text-white/55"
+                    }`}
                   >
                     {projectTranslation.description}
                   </motion.p>
@@ -452,35 +523,45 @@ const Projects = () => {
                     }}
                     className="mt-6 grid grid-cols-2 gap-2"
                   >
-                    {projectTranslation.features.map((feature, featureIndex) => (
-                      <motion.div
-                        key={feature}
-                        initial={{
-                          opacity: 0,
-                          scale: 0.94,
-                        }}
-                        whileInView={{
-                          opacity: 1,
-                          scale: 1,
-                        }}
-                        viewport={{
-                          once: false,
-                          amount: 0.15,
-                        }}
-                        transition={{
-                          duration: 0.35,
-                          delay:
-                            index * 0.18 +
-                            0.42 +
-                            featureIndex * 0.05,
-                        }}
-                        className="border border-white/5 bg-white/[0.025] px-3 py-2.5"
-                      >
-                        <span className="text-xs text-white/55">
-                          {feature}
-                        </span>
-                      </motion.div>
-                    ))}
+                    {projectTranslation.features.map(
+                      (feature, featureIndex) => (
+                        <motion.div
+                          key={feature}
+                          initial={{
+                            opacity: 0,
+                            scale: 0.94,
+                          }}
+                          whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                          }}
+                          viewport={{
+                            once: false,
+                            amount: 0.15,
+                          }}
+                          transition={{
+                            duration: 0.35,
+                            delay:
+                              index * 0.18 +
+                              0.42 +
+                              featureIndex * 0.05,
+                          }}
+                          className={`border px-3 py-2.5 ${
+                            isLight
+                              ? "border-gray-200 bg-gray-50 hover:border-cyan-200 hover:bg-cyan-50"
+                              : "border-white/5 bg-white/[0.025]"
+                          }`}
+                        >
+                          <span
+                            className={`text-xs ${
+                              isLight ? "text-gray-700" : "text-white/55"
+                            }`}
+                          >
+                            {feature}
+                          </span>
+                        </motion.div>
+                      ),
+                    )}
                   </motion.div>
 
                   {/* =================================
@@ -522,10 +603,16 @@ const Projects = () => {
                           duration: 0.45,
                           delay: index * 0.18 + 0.5,
                         }}
-                        className="h-px bg-white/15"
+                        className={`h-px ${
+                          isLight ? "bg-gray-300" : "bg-white/15"
+                        }`}
                       />
 
-                      <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/35">
+                      <span
+                        className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                          isLight ? "text-gray-500" : "text-white/35"
+                        }`}
+                      >
                         {t.projects.techStack}
                       </span>
                     </div>
@@ -554,7 +641,11 @@ const Projects = () => {
                                 0.52 +
                                 technologyIndex * 0.045,
                             }}
-                            className="border border-white/8 bg-white/[0.03] px-2.5 py-1.5 text-[11px] text-white/50 transition-colors duration-300 group-hover:border-white/12 group-hover:text-white/70"
+                            className={`border px-2.5 py-1.5 text-[11px] transition-colors duration-300 ${
+                              isLight
+                                ? "border-gray-200 bg-gray-50 text-gray-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-gray-950"
+                                : "border-white/8 bg-white/[0.03] text-white/50 group-hover:border-white/12 group-hover:text-white/70"
+                            }`}
                           >
                             {technology}
                           </motion.span>
@@ -592,12 +683,20 @@ const Projects = () => {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/button inline-flex items-center gap-2 border border-white/15 bg-gradient-to-r from-slate-900 via-blue-950 to-violet-950 px-4 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:border-cyan-300/50"
+                        className={`group/button inline-flex items-center gap-2 border px-4 py-2.5 text-xs font-semibold transition-all duration-300 ${
+                          isLight
+                            ? "border-gray-950 bg-gray-950 text-white shadow-sm hover:border-cyan-700 hover:bg-cyan-700"
+                            : "border-white/15 bg-gradient-to-r from-slate-900 via-blue-950 to-violet-950 text-white hover:border-cyan-300/50"
+                        }`}
                       >
                         <GitBranch
                           size={15}
                           strokeWidth={1.8}
-                          className="text-white/70 transition-colors duration-300 group-hover/button:text-cyan-300"
+                          className={`transition-colors duration-300 ${
+                            isLight
+                              ? "text-white"
+                              : "text-white/70 group-hover/button:text-cyan-300"
+                          }`}
                         />
 
                         <span>{t.projects.github}</span>
@@ -609,7 +708,13 @@ const Projects = () => {
                         />
                       </a>
                     ) : (
-                      <span className="inline-flex cursor-not-allowed items-center gap-2 border border-white/5 bg-white/[0.02] px-4 py-2.5 text-xs font-medium text-white/25">
+                      <span
+                        className={`inline-flex cursor-not-allowed items-center gap-2 border px-4 py-2.5 text-xs font-medium ${
+                          isLight
+                            ? "border-gray-200 bg-gray-100 text-gray-400"
+                            : "border-white/5 bg-white/[0.02] text-white/25"
+                        }`}
+                      >
                         <GitBranch size={15} strokeWidth={1.8} />
                         <span>{t.projects.github}</span>
                       </span>
@@ -621,12 +726,16 @@ const Projects = () => {
                         href={project.live}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/button inline-flex items-center gap-2 border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-medium text-white/65 transition-all duration-300 hover:border-violet-400/30 hover:bg-violet-400/5 hover:text-white"
+                        className={`group/button inline-flex items-center gap-2 border px-4 py-2.5 text-xs font-semibold transition-all duration-300 ${
+                          isLight
+                            ? "border-gray-300 bg-white text-gray-900 shadow-sm hover:border-violet-400 hover:bg-violet-50 hover:text-violet-800"
+                            : "border-white/10 bg-white/[0.03] text-white/65 hover:border-violet-400/30 hover:bg-violet-400/5 hover:text-white"
+                        }`}
                       >
                         <ExternalLink
                           size={15}
                           strokeWidth={1.8}
-                          className="transition-colors duration-300 group-hover/button:text-violet-300"
+                          className="transition-colors duration-300 group-hover/button:text-violet-500"
                         />
 
                         <span>{t.projects.liveDemo}</span>
@@ -638,7 +747,13 @@ const Projects = () => {
                         />
                       </a>
                     ) : (
-                      <span className="inline-flex cursor-not-allowed items-center gap-2 border border-white/5 bg-white/[0.02] px-4 py-2.5 text-xs font-medium text-white/25">
+                      <span
+                        className={`inline-flex cursor-not-allowed items-center gap-2 border px-4 py-2.5 text-xs font-medium ${
+                          isLight
+                            ? "border-gray-200 bg-gray-100 text-gray-400"
+                            : "border-white/5 bg-white/[0.02] text-white/25"
+                        }`}
+                      >
                         <ExternalLink size={15} strokeWidth={1.8} />
                         <span>{t.projects.liveDemo}</span>
                       </span>
@@ -673,13 +788,23 @@ const Projects = () => {
           className="mx-auto mt-14 max-w-2xl text-center"
         >
           <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-gradient-to-r from-transparent to-cyan-400/40" />
+            <span
+              className={`h-px w-10 bg-gradient-to-r from-transparent to-cyan-400/40`}
+            />
 
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-medium tracking-wide text-transparent">
+            <span
+              className={`bg-gradient-to-r bg-clip-text text-xs font-semibold tracking-wide text-transparent ${
+                isLight
+                  ? "from-cyan-600 via-blue-700 to-violet-700"
+                  : "from-cyan-300 via-blue-400 to-violet-400"
+              }`}
+            >
               {t.projects.moreProjects}
             </span>
 
-            <span className="h-px w-10 bg-gradient-to-l from-transparent to-violet-400/40" />
+            <span
+              className={`h-px w-10 bg-gradient-to-l from-transparent to-violet-400/40`}
+            />
           </div>
         </motion.div>
       </div>
@@ -710,7 +835,13 @@ const Projects = () => {
         aria-label={t.projects.scrollContact}
       >
         {/* Text */}
-        <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-[9px] font-medium uppercase tracking-[0.22em] text-transparent transition-opacity duration-300 group-hover:opacity-80 sm:text-[10px]">
+        <span
+          className={`bg-gradient-to-r bg-clip-text text-[9px] font-semibold uppercase tracking-[0.22em] text-transparent transition-opacity duration-300 group-hover:opacity-80 sm:text-[10px] ${
+            isLight
+              ? "from-cyan-600 via-blue-700 to-violet-700"
+              : "from-cyan-300 via-blue-400 to-violet-400"
+          }`}
+        >
           {t.projects.scrollContact}
         </span>
 
@@ -724,7 +855,9 @@ const Projects = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="relative flex h-8 w-5 items-start justify-center rounded-full border border-white/20 p-1 transition-all duration-300 group-hover:border-cyan-400/40 sm:h-9 sm:w-[22px]"
+          className={`relative flex h-8 w-5 items-start justify-center rounded-full border p-1 transition-all duration-300 group-hover:border-cyan-400/60 sm:h-9 sm:w-[22px] ${
+            isLight ? "border-gray-400" : "border-white/20"
+          }`}
         >
           <motion.span
             animate={{
@@ -736,7 +869,7 @@ const Projects = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="h-1.5 w-1 rounded-full bg-gradient-to-b from-cyan-300 to-violet-400"
+            className="h-1.5 w-1 rounded-full bg-gradient-to-b from-cyan-500 to-violet-500"
           />
 
           {/* Glow */}
@@ -753,7 +886,11 @@ const Projects = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="text-white/25 transition-colors duration-300 group-hover:text-cyan-300/70"
+          className={`transition-colors duration-300 ${
+            isLight
+              ? "text-gray-500 group-hover:text-cyan-700"
+              : "text-white/25 group-hover:text-cyan-300/70"
+          }`}
         >
           <ChevronDown size={13} strokeWidth={1.5} />
         </motion.div>

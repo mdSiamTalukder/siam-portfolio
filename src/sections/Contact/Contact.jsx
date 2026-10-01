@@ -7,6 +7,7 @@ import {
   Send,
 } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
 import translations from "../../data/translations";
 
 const socialLinks = [
@@ -135,7 +136,10 @@ const formItemReveal = {
 
 const Contact = () => {
   const { language } = useLanguage();
+  const { theme } = useTheme();
+
   const t = translations[language];
+  const isLight = theme === "light";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -224,7 +228,11 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden border-t border-white/5 bg-[#050505] py-24 sm:py-28 lg:py-32"
+      className={`relative overflow-hidden border-t py-20 transition-colors duration-500 sm:py-28 lg:py-32 ${
+        isLight
+          ? "border-slate-200 bg-slate-50"
+          : "border-white/5 bg-[#050505]"
+      }`}
     >
       {/* =================================
           Background Glows
@@ -292,17 +300,23 @@ const Contact = () => {
               className="h-px bg-gradient-to-r from-cyan-400 to-violet-400"
             />
 
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent">
+            <span
+              className={`bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent ${
+                isLight ? "drop-shadow-sm" : ""
+              }`}
+            >
               {t.contact.badge}
             </span>
           </motion.div>
 
           <motion.h2
             variants={headingItem}
-            className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl"
+            className={`text-3xl font-semibold leading-tight tracking-[-0.03em] transition-colors duration-500 sm:text-4xl md:text-5xl ${
+              isLight ? "text-slate-950" : "text-white"
+            }`}
           >
             {t.contact.titleStart}{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 bg-clip-text text-transparent">
               {t.contact.titleEnd}
             </span>
           </motion.h2>
@@ -314,7 +328,9 @@ const Contact = () => {
 
           <motion.p
             variants={headingItem}
-            className="mt-6 max-w-2xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8"
+            className={`mt-6 max-w-2xl text-sm leading-7 transition-colors duration-500 sm:text-base sm:leading-8 ${
+              isLight ? "text-slate-700" : "text-white/45"
+            }`}
           >
             {t.contact.description}
           </motion.p>
@@ -342,52 +358,100 @@ const Contact = () => {
               {/* Availability */}
 
               <motion.div
-                initial={{ opacity: 0, scale: 0.92, x: -15 }}
-                whileInView={{ opacity: 1, scale: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.92,
+                  x: -15,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: false,
+                  amount: 0.25,
+                }}
                 transition={{
                   duration: 0.55,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="inline-flex items-center gap-2 border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-2"
+                className={`inline-flex items-center gap-2 border px-3 py-2 transition-colors duration-500 ${
+                  isLight
+                    ? "border-emerald-300 bg-emerald-50"
+                    : "border-emerald-400/15 bg-emerald-400/[0.04]"
+                }`}
               >
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
+
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
 
-                <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-emerald-300/80">
+                <span
+                  className={`text-[10px] font-medium uppercase tracking-[0.18em] ${
+                    isLight
+                      ? "text-emerald-700"
+                      : "text-emerald-300/80"
+                  }`}
+                >
                   {t.contact.availability}
                 </span>
               </motion.div>
 
               <motion.h3
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{
+                  opacity: 0,
+                  y: 20,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: false,
+                  amount: 0.25,
+                }}
                 transition={{
                   duration: 0.65,
                   delay: 0.1,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-7 text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+                className={`mt-7 text-2xl font-semibold tracking-tight transition-colors duration-500 sm:text-3xl ${
+                  isLight
+                    ? "text-slate-950"
+                    : "text-white"
+                }`}
               >
                 {t.contact.talkTitleStart}{" "}
-                <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 bg-clip-text text-transparent">
                   {t.contact.talkTitleEnd}
                 </span>
               </motion.h3>
 
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: false,
+                  amount: 0.25,
+                }}
                 transition={{
                   duration: 0.6,
                   delay: 0.18,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-5 max-w-md text-sm leading-7 text-white/40"
+                className={`mt-5 max-w-md text-sm leading-7 transition-colors duration-500 ${
+                  isLight
+                    ? "text-slate-700"
+                    : "text-white/40"
+                }`}
               >
                 {t.contact.talkDescription}
               </motion.p>
@@ -396,33 +460,67 @@ const Contact = () => {
             {/* Location */}
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: false,
+                amount: 0.2,
+              }}
               transition={{
                 duration: 0.6,
                 delay: 0.25,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="mt-10 flex items-center gap-3 border-t border-white/5 pt-6"
+              className={`mt-10 flex items-center gap-3 border-t pt-6 transition-colors duration-500 ${
+                isLight
+                  ? "border-slate-200"
+                  : "border-white/5"
+              }`}
             >
               <motion.div
                 whileHover={{
                   scale: 1.08,
                   rotate: -4,
                 }}
-                transition={{ duration: 0.25 }}
-                className="flex h-10 w-10 items-center justify-center border border-white/10 bg-white/[0.025] text-cyan-300"
+                transition={{
+                  duration: 0.25,
+                }}
+                className={`flex h-10 w-10 items-center justify-center border transition-colors duration-300 ${
+                  isLight
+                    ? "border-slate-200 bg-white text-cyan-600 shadow-sm"
+                    : "border-white/10 bg-white/[0.025] text-cyan-300"
+                }`}
               >
-                <MapPin size={17} strokeWidth={1.6} />
+                <MapPin
+                  size={17}
+                  strokeWidth={1.6}
+                />
               </motion.div>
 
               <div>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                <p
+                  className={`text-[10px] uppercase tracking-[0.18em] ${
+                    isLight
+                      ? "text-slate-500"
+                      : "text-white/25"
+                  }`}
+                >
                   {t.contact.basedIn}
                 </p>
 
-                <p className="mt-1 text-sm text-white/60">
+                <p
+                  className={`mt-1 text-sm ${
+                    isLight
+                      ? "text-slate-800"
+                      : "text-white/60"
+                  }`}
+                >
                   {t.contact.location}
                 </p>
               </div>
@@ -455,14 +553,24 @@ const Contact = () => {
                         ease: "easeOut",
                       },
                     }}
-                    className="group relative flex items-center justify-between overflow-hidden border border-white/5 bg-white/[0.015] px-4 py-3 transition-all duration-300 hover:border-cyan-400/15 hover:bg-white/[0.03]"
+                    className={`group relative flex items-center justify-between overflow-hidden border px-4 py-3 transition-all duration-300 ${
+                      isLight
+                        ? "border-slate-200 bg-white shadow-sm hover:border-cyan-300 hover:bg-slate-50"
+                        : "border-white/5 bg-white/[0.015] hover:border-cyan-400/15 hover:bg-white/[0.03]"
+                    }`}
                   >
                     {/* Hover Line */}
 
                     <motion.span
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
+                      initial={{
+                        scaleX: 0,
+                      }}
+                      whileHover={{
+                        scaleX: 1,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                      }}
                       className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-cyan-400 to-violet-400"
                     />
 
@@ -472,22 +580,43 @@ const Contact = () => {
                           scale: 1.08,
                           rotate: 3,
                         }}
-                        transition={{ duration: 0.2 }}
-                        className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/10 bg-white/[0.025] text-[10px] font-semibold uppercase tracking-tight text-white/45 transition-all duration-300 group-hover:border-cyan-400/20 group-hover:text-cyan-300"
+                        transition={{
+                          duration: 0.2,
+                        }}
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center border text-[10px] font-semibold uppercase tracking-tight transition-all duration-300 ${
+                          isLight
+                            ? "border-slate-200 bg-slate-50 text-slate-600 group-hover:border-cyan-300 group-hover:text-cyan-600"
+                            : "border-white/10 bg-white/[0.025] text-white/45 group-hover:border-cyan-400/20 group-hover:text-cyan-300"
+                        }`}
                       >
                         {typeof Icon === "string" ? (
                           Icon
                         ) : (
-                          <Icon size={16} strokeWidth={1.6} />
+                          <Icon
+                            size={16}
+                            strokeWidth={1.6}
+                          />
                         )}
                       </motion.div>
 
                       <div className="min-w-0">
-                        <p className="text-xs font-medium text-white/65">
+                        <p
+                          className={`text-xs font-medium ${
+                            isLight
+                              ? "text-slate-800"
+                              : "text-white/65"
+                          }`}
+                        >
                           {t.contact[item.key]}
                         </p>
 
-                        <p className="mt-0.5 truncate text-[11px] text-white/25">
+                        <p
+                          className={`mt-0.5 truncate text-[11px] ${
+                            isLight
+                              ? "text-slate-500"
+                              : "text-white/25"
+                          }`}
+                        >
                           {item.value}
                         </p>
                       </div>
@@ -496,7 +625,11 @@ const Contact = () => {
                     <ArrowUpRight
                       size={15}
                       strokeWidth={1.5}
-                      className="shrink-0 text-white/20 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-cyan-300"
+                      className={`shrink-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+                        isLight
+                          ? "text-slate-400 group-hover:text-cyan-600"
+                          : "text-white/20 group-hover:text-cyan-300"
+                      }`}
                     />
                   </motion.a>
                 );
@@ -523,14 +656,24 @@ const Contact = () => {
                 ease: "easeOut",
               },
             }}
-            className="group/form relative overflow-hidden border border-white/10 bg-white/[0.025] p-5 backdrop-blur-xl transition-colors duration-500 hover:border-white/15 sm:p-7 lg:p-8"
+            className={`group/form relative overflow-hidden border p-5 backdrop-blur-xl transition-all duration-500 sm:p-7 lg:p-8 ${
+              isLight
+                ? "border-slate-200 bg-white shadow-sm hover:border-slate-300"
+                : "border-white/10 bg-white/[0.025] hover:border-white/15"
+            }`}
           >
             {/* Form Glow */}
 
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: false }}
+              initial={{
+                opacity: 0,
+              }}
+              whileInView={{
+                opacity: 1,
+              }}
+              viewport={{
+                once: false,
+              }}
               transition={{
                 duration: 1.2,
                 delay: 0.3,
@@ -539,9 +682,15 @@ const Contact = () => {
             />
 
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: false }}
+              initial={{
+                opacity: 0,
+              }}
+              whileInView={{
+                opacity: 1,
+              }}
+              viewport={{
+                once: false,
+              }}
               transition={{
                 duration: 1.2,
                 delay: 0.5,
@@ -552,9 +701,15 @@ const Contact = () => {
             {/* Animated Border */}
 
             <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: false }}
+              initial={{
+                scaleX: 0,
+              }}
+              whileInView={{
+                scaleX: 1,
+              }}
+              viewport={{
+                once: false,
+              }}
               transition={{
                 duration: 1,
                 delay: 0.15,
@@ -570,14 +725,29 @@ const Contact = () => {
                 variants={formItemReveal}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{
+                  once: false,
+                  amount: 0.2,
+                }}
                 className="mb-7"
               >
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
+                <p
+                  className={`text-xs font-medium uppercase tracking-[0.18em] ${
+                    isLight
+                      ? "text-slate-500"
+                      : "text-white/30"
+                  }`}
+                >
                   {t.contact.sendMessageTitle}
                 </p>
 
-                <p className="mt-2 text-sm text-white/40">
+                <p
+                  className={`mt-2 text-sm ${
+                    isLight
+                      ? "text-slate-600"
+                      : "text-white/40"
+                  }`}
+                >
                   {t.contact.sendMessageDescription}
                 </p>
               </motion.div>
@@ -594,12 +764,19 @@ const Contact = () => {
                   variants={formItemReveal}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.2 }}
+                  viewport={{
+                    once: false,
+                    amount: 0.2,
+                  }}
                   className="group/input"
                 >
                   <label
                     htmlFor="name"
-                    className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
+                    className={`mb-2 block text-xs font-medium uppercase tracking-[0.14em] ${
+                      isLight
+                        ? "text-slate-600"
+                        : "text-white/45"
+                    }`}
                   >
                     {t.contact.form.name}
                   </label>
@@ -611,10 +788,16 @@ const Contact = () => {
                       type="text"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder={t.contact.form.namePlaceholder}
+                      placeholder={
+                        t.contact.form.namePlaceholder
+                      }
                       required
                       disabled={isSubmitting}
-                      className="peer w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                      className={`peer w-full border px-4 py-3.5 text-sm outline-none transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        isLight
+                          ? "border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white"
+                          : "border-white/10 bg-black/20 text-white placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025]"
+                      }`}
                     />
 
                     <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
@@ -628,12 +811,19 @@ const Contact = () => {
                   variants={formItemReveal}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.2 }}
+                  viewport={{
+                    once: false,
+                    amount: 0.2,
+                  }}
                   className="group/input"
                 >
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
+                    className={`mb-2 block text-xs font-medium uppercase tracking-[0.14em] ${
+                      isLight
+                        ? "text-slate-600"
+                        : "text-white/45"
+                    }`}
                   >
                     {t.contact.form.email}
                   </label>
@@ -645,10 +835,16 @@ const Contact = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder={t.contact.form.emailPlaceholder}
+                      placeholder={
+                        t.contact.form.emailPlaceholder
+                      }
                       required
                       disabled={isSubmitting}
-                      className="peer w-full border border-white/10 bg-black/20 px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                      className={`peer w-full border px-4 py-3.5 text-sm outline-none transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        isLight
+                          ? "border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white"
+                          : "border-white/10 bg-black/20 text-white placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025]"
+                      }`}
                     />
 
                     <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
@@ -662,12 +858,19 @@ const Contact = () => {
                   variants={formItemReveal}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.2 }}
+                  viewport={{
+                    once: false,
+                    amount: 0.2,
+                  }}
                   className="group/input"
                 >
                   <label
                     htmlFor="message"
-                    className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/45"
+                    className={`mb-2 block text-xs font-medium uppercase tracking-[0.14em] ${
+                      isLight
+                        ? "text-slate-600"
+                        : "text-white/45"
+                    }`}
                   >
                     {t.contact.form.message}
                   </label>
@@ -684,7 +887,11 @@ const Contact = () => {
                       rows={6}
                       required
                       disabled={isSubmitting}
-                      className="peer w-full resize-none border border-white/10 bg-black/20 px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025] disabled:cursor-not-allowed disabled:opacity-50"
+                      className={`peer w-full resize-none border px-4 py-3.5 text-sm leading-6 outline-none transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${
+                        isLight
+                          ? "border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white"
+                          : "border-white/10 bg-black/20 text-white placeholder:text-white/20 focus:border-cyan-400/40 focus:bg-white/[0.025]"
+                      }`}
                     />
 
                     <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-violet-400 transition-all duration-500 peer-focus:w-full" />
@@ -711,8 +918,12 @@ const Contact = () => {
                     }}
                     className={`border px-4 py-3 text-sm ${
                       status.type === "success"
-                        ? "border-emerald-400/20 bg-emerald-400/[0.05] text-emerald-300"
-                        : "border-red-400/20 bg-red-400/[0.05] text-red-300"
+                        ? isLight
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                          : "border-emerald-400/20 bg-emerald-400/[0.05] text-emerald-300"
+                        : isLight
+                          ? "border-red-300 bg-red-50 text-red-700"
+                          : "border-red-400/20 bg-red-400/[0.05] text-red-300"
                     }`}
                   >
                     {status.message}
@@ -743,18 +954,22 @@ const Contact = () => {
                     duration: 0.25,
                     ease: "easeOut",
                   }}
-                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden border border-white/15 bg-white px-5 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden border border-slate-800 bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {/* Button Shine */}
 
                   <motion.span
-                    initial={{ x: "-120%" }}
-                    whileHover={{ x: "120%" }}
+                    initial={{
+                      x: "-120%",
+                    }}
+                    whileHover={{
+                      x: "120%",
+                    }}
                     transition={{
                       duration: 0.7,
                       ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12 bg-black/[0.06]"
+                    className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12 bg-white/[0.08]"
                   />
 
                   <span className="relative z-10">
@@ -802,18 +1017,34 @@ const Contact = () => {
             delay: 0.2,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="mt-20 flex flex-col gap-4 border-t border-white/5 pt-6 sm:flex-row sm:items-center sm:justify-between"
+          className={`mt-20 flex flex-col gap-4 border-t pt-6 transition-colors duration-500 sm:flex-row sm:items-center sm:justify-between ${
+            isLight
+              ? "border-slate-200"
+              : "border-white/5"
+          }`}
         >
-          <p className="text-xs text-white/25">
+          <p
+            className={`text-xs ${
+              isLight
+                ? "text-slate-500"
+                : "text-white/25"
+            }`}
+          >
             © {new Date().getFullYear()} Siam Talukder.{" "}
             {t.contact.footer.copyright}
           </p>
 
           <a
             href="#home"
-            className="group flex items-center gap-2 text-xs text-white/30 transition-colors duration-300 hover:text-white"
+            className={`group flex items-center gap-2 text-xs transition-colors duration-300 ${
+              isLight
+                ? "text-slate-500 hover:text-slate-950"
+                : "text-white/30 hover:text-white"
+            }`}
           >
-            <span>{t.contact.footer.backToTop}</span>
+            <span>
+              {t.contact.footer.backToTop}
+            </span>
 
             <ArrowUpRight
               size={14}

@@ -11,6 +11,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
 import translations from "../../data/translations";
 
 const skillGroups = [
@@ -184,9 +185,11 @@ const getAnimationOrder = (startIndex) => {
 
 const Skills = () => {
   const { language } = useLanguage();
-  const t = translations[language];
+  const { theme } = useTheme();
 
+  const t = translations[language];
   const isBangla = language === "BN";
+  const isLight = theme === "light";
 
   const [animationStart, setAnimationStart] = useState(
     getInitialAnimationStart,
@@ -208,10 +211,6 @@ const Skills = () => {
       if (clickedIndex >= 0) {
         setAnimationStart(clickedIndex);
 
-        /*
-          Changing cycle forces the cards to
-          mount again and replay the animation.
-        */
         setAnimationCycle((prev) => prev + 1);
       }
     };
@@ -223,46 +222,43 @@ const Skills = () => {
     };
   }, []);
 
-  /*
-    Example:
-
-    Frontend click:
-    0 → 1 → 2 → 3
-
-    Backend click:
-    1 → 2 → 3 → 0
-
-    Database click:
-    2 → 3 → 0 → 1
-
-    Full Stack click:
-    3 → 0 → 1 → 2
-  */
   const animationOrder = getAnimationOrder(animationStart);
 
   const getCardDelay = (cardIndex) => {
     const sequenceIndex = animationOrder.indexOf(cardIndex);
 
-    /*
-      Each card waits for the previous card
-      to almost finish before entering.
-    */
     return sequenceIndex * 0.95;
   };
 
   return (
     <section
       id="skills"
-      className="relative overflow-hidden border-t border-white/5 py-24 pb-32 sm:py-28 sm:pb-36 lg:py-32 lg:pb-40"
+      className={`relative overflow-hidden border-t py-24 pb-32 transition-colors duration-500 sm:py-28 sm:pb-36 lg:py-32 lg:pb-40 ${
+        isLight
+          ? "border-gray-200 bg-[#f8fafc]"
+          : "border-white/5 bg-[#050505]"
+      }`}
     >
       {/* =================================
           Background Glows
       ================================== */}
-      <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-cyan-500/[0.045] blur-[120px]" />
+      <div
+        className={`pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full blur-[120px] ${
+          isLight ? "bg-cyan-400/10" : "bg-cyan-500/[0.045]"
+        }`}
+      />
 
-      <div className="pointer-events-none absolute -right-40 top-1/3 h-96 w-96 rounded-full bg-violet-500/[0.05] blur-[120px]" />
+      <div
+        className={`pointer-events-none absolute -right-40 top-1/3 h-96 w-96 rounded-full blur-[120px] ${
+          isLight ? "bg-violet-400/10" : "bg-violet-500/[0.05]"
+        }`}
+      />
 
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-pink-500/[0.025] blur-[120px]" />
+      <div
+        className={`pointer-events-none absolute bottom-0 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full blur-[120px] ${
+          isLight ? "bg-pink-400/10" : "bg-pink-500/[0.025]"
+        }`}
+      />
 
       {/* =================================
           Main Container
@@ -293,9 +289,17 @@ const Skills = () => {
             variants={headingVariants}
             className="mb-5 flex items-center gap-3"
           >
-            <span className="h-px w-8 bg-gradient-to-r from-cyan-400 to-violet-400 sm:w-12" />
+            <span
+              className={`h-px w-8 bg-gradient-to-r from-cyan-400 to-violet-400 sm:w-12 ${
+                isLight ? "opacity-90" : ""
+              }`}
+            />
 
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent">
+            <span
+              className={`bg-gradient-to-r from-cyan-500 via-blue-600 to-violet-600 bg-clip-text text-xs font-semibold uppercase tracking-[0.22em] text-transparent ${
+                isLight ? "" : "from-cyan-300 via-blue-400 to-violet-400"
+              }`}
+            >
               {t.skills.badge}
             </span>
           </motion.div>
@@ -303,13 +307,21 @@ const Skills = () => {
           {/* Heading */}
           <motion.h2
             variants={headingVariants}
-            className="text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl md:text-5xl"
+            className={`text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl md:text-5xl ${
+              isLight ? "text-gray-950" : "text-white"
+            }`}
           >
             {isBangla
               ? "আমি যেসব টুল ব্যবহার করি "
               : "Tools I use to build "}
 
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
+            <span
+              className={`bg-gradient-to-r bg-clip-text text-transparent ${
+                isLight
+                  ? "from-cyan-600 via-blue-700 to-violet-700"
+                  : "from-cyan-400 via-blue-400 to-violet-500"
+              }`}
+            >
               {isBangla
                 ? "ডিজিটাল প্রোডাক্ট।"
                 : "digital products."}
@@ -319,7 +331,9 @@ const Skills = () => {
           {/* Description */}
           <motion.p
             variants={headingVariants}
-            className="mt-5 max-w-2xl text-sm leading-7 text-white/40 sm:text-base"
+            className={`mt-5 max-w-2xl text-sm leading-7 sm:text-base ${
+              isLight ? "text-gray-600" : "text-white/40"
+            }`}
           >
             {isBangla
               ? "ফ্রন্টএন্ড, ব্যাকএন্ড, ডেটাবেস এবং ফুল-স্ট্যাক ডেভেলপমেন্টে আমি যেসব প্রযুক্তি ও টুল ব্যবহার করি।"
@@ -329,7 +343,9 @@ const Skills = () => {
           {/* Accent */}
           <motion.div
             variants={headingVariants}
-            className="mt-5 h-px w-24 bg-gradient-to-r from-cyan-400 via-blue-400 to-transparent"
+            className={`mt-5 h-px w-24 bg-gradient-to-r from-cyan-500 via-blue-500 to-transparent ${
+              isLight ? "opacity-80" : ""
+            }`}
           />
         </motion.div>
 
@@ -397,7 +413,11 @@ const Skills = () => {
                       ease: "easeOut",
                     },
                   }}
-                  className="group relative h-full overflow-hidden border border-white/10 bg-white/[0.025] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/15 hover:bg-white/[0.04] sm:p-7"
+                  className={`group relative h-full overflow-hidden p-6 backdrop-blur-xl transition-all duration-300 sm:p-7 ${
+                    isLight
+                      ? "border border-gray-200 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.07)] hover:border-cyan-300 hover:bg-white hover:shadow-[0_15px_45px_rgba(15,23,42,0.11)]"
+                      : "border border-white/10 bg-white/[0.025] hover:border-white/15 hover:bg-white/[0.04]"
+                  }`}
                 >
                   {/* Glow */}
                   <div
@@ -405,7 +425,9 @@ const Skills = () => {
                   />
 
                   {/* Shine */}
-                  <div className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent opacity-0 transition-all duration-700 group-hover:left-[130%] group-hover:opacity-100" />
+                  <div
+                    className={`pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 transition-all duration-700 group-hover:left-[130%] group-hover:opacity-100`}
+                  />
 
                   <div className="relative">
                     {/* Card Header */}
@@ -430,7 +452,11 @@ const Skills = () => {
                           delay: cardDelay + 0.2,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className={`flex h-12 w-12 items-center justify-center border border-white/10 bg-gradient-to-br ${group.gradient} bg-clip-border text-white transition-all duration-300 group-hover:border-white/20`}
+                        className={`flex h-12 w-12 items-center justify-center border bg-gradient-to-br ${group.gradient} text-white transition-all duration-300 ${
+                          isLight
+                            ? "border-gray-200 shadow-sm"
+                            : "border-white/10"
+                        }`}
                       >
                         <Icon size={21} strokeWidth={1.7} />
                       </motion.div>
@@ -484,7 +510,9 @@ const Skills = () => {
                         duration: 0.45,
                         delay: cardDelay + 0.3,
                       }}
-                      className="mt-2 text-sm text-white/35"
+                      className={`mt-2 text-sm ${
+                        isLight ? "text-gray-600" : "text-white/35"
+                      }`}
                     >
                       {groupTranslation.subtitle}
                     </motion.p>
@@ -502,10 +530,14 @@ const Skills = () => {
                             once: false,
                             amount: 0.15,
                           }}
-                          className="group/skill inline-flex items-center gap-2 border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/55 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
+                          className={`group/skill inline-flex items-center gap-2 border px-3 py-2 text-xs transition-all duration-300 ${
+                            isLight
+                              ? "border-gray-200 bg-gray-50 text-gray-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-gray-950"
+                              : "border-white/10 bg-black/20 text-white/55 hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
+                          }`}
                         >
                           <span
-                            className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${group.gradient} opacity-70`}
+                            className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${group.gradient} opacity-90`}
                           />
 
                           {skill}
@@ -515,7 +547,7 @@ const Skills = () => {
 
                     {/* Bottom Accent */}
                     <div
-                      className={`mt-7 h-px w-14 bg-gradient-to-r ${group.gradient} opacity-40 transition-all duration-300 group-hover:w-24 group-hover:opacity-80`}
+                      className={`mt-7 h-px w-14 bg-gradient-to-r ${group.gradient} opacity-60 transition-all duration-300 group-hover:w-24 group-hover:opacity-100`}
                     />
                   </div>
                 </motion.div>
@@ -583,10 +615,16 @@ const Skills = () => {
                     duration: 0.25,
                   },
                 }}
-                className="group relative overflow-hidden border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]"
+                className={`group relative overflow-hidden p-6 backdrop-blur-xl transition-all duration-300 ${
+                  isLight
+                    ? "border border-gray-200 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] hover:border-cyan-300 hover:shadow-[0_12px_35px_rgba(15,23,42,0.1)]"
+                    : "border border-white/10 bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.035]"
+                }`}
               >
                 {/* Glow */}
-                <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-cyan-400/[0.04] blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div
+                  className={`pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-cyan-400/[0.06] blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                />
 
                 <div className="relative flex items-start gap-4">
                   {/* Icon */}
@@ -609,13 +647,19 @@ const Skills = () => {
                       duration: 0.45,
                       delay: index * 0.12 + 0.15,
                     }}
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 bg-white/[0.03] bg-gradient-to-br ${tool.gradient} bg-clip-border text-white`}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center border bg-gradient-to-br ${tool.gradient} bg-clip-border text-white ${
+                      isLight ? "border-gray-200 shadow-sm" : "border-white/10"
+                    }`}
                   >
                     <Icon size={18} strokeWidth={1.7} />
                   </motion.div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-white">
+                    <h3
+                      className={`text-sm font-semibold ${
+                        isLight ? "text-gray-950" : "text-white"
+                      }`}
+                    >
                       {toolTitle}
                     </h3>
 
@@ -635,12 +679,18 @@ const Skills = () => {
                         return (
                           <span
                             key={item}
-                            className="inline-flex items-center gap-1.5 text-xs text-white/40"
+                            className={`inline-flex items-center gap-1.5 text-xs ${
+                              isLight ? "text-gray-600" : "text-white/40"
+                            }`}
                           >
                             <Check
                               size={12}
                               strokeWidth={2}
-                              className="text-cyan-300/70"
+                              className={
+                                isLight
+                                  ? "text-cyan-700"
+                                  : "text-cyan-300/70"
+                              }
                             />
 
                             {translatedItem}
@@ -682,7 +732,13 @@ const Skills = () => {
         aria-label={t.skills.scrollProjects}
       >
         {/* Text */}
-        <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-[9px] font-medium uppercase tracking-[0.22em] text-transparent transition-opacity duration-300 group-hover:opacity-80 sm:text-[10px]">
+        <span
+          className={`bg-gradient-to-r bg-clip-text text-[9px] font-semibold uppercase tracking-[0.22em] text-transparent transition-opacity duration-300 group-hover:opacity-80 sm:text-[10px] ${
+            isLight
+              ? "from-cyan-600 via-blue-700 to-violet-700"
+              : "from-cyan-300 via-blue-400 to-violet-400"
+          }`}
+        >
           {t.skills.scrollProjects}
         </span>
 
@@ -696,7 +752,9 @@ const Skills = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="relative flex h-8 w-5 items-start justify-center rounded-full border border-white/20 p-1 transition-all duration-300 group-hover:border-cyan-400/40 sm:h-9 sm:w-[22px]"
+          className={`relative flex h-8 w-5 items-start justify-center rounded-full border p-1 transition-all duration-300 group-hover:border-cyan-400/60 sm:h-9 sm:w-[22px] ${
+            isLight ? "border-gray-400" : "border-white/20"
+          }`}
         >
           <motion.span
             animate={{
@@ -708,7 +766,7 @@ const Skills = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="h-1.5 w-1 rounded-full bg-gradient-to-b from-cyan-300 to-violet-400"
+            className="h-1.5 w-1 rounded-full bg-gradient-to-b from-cyan-500 to-violet-500"
           />
 
           {/* Glow */}
@@ -725,7 +783,11 @@ const Skills = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="text-white/25 transition-colors duration-300 group-hover:text-cyan-300/70"
+          className={`transition-colors duration-300 ${
+            isLight
+              ? "text-gray-500 group-hover:text-cyan-700"
+              : "text-white/25 group-hover:text-cyan-300/70"
+          }`}
         >
           <ChevronDown size={13} strokeWidth={1.5} />
         </motion.div>
